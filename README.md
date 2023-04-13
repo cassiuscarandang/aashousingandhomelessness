@@ -2,7 +2,7 @@
 
 ## What social problem is being addressed?
 
-We are in desperate need for affordable housing for people that are below the poverty line and experiencing housing insecurity. We will address the issue of accessing affordable by showing what areas have affordable housing and what areas don't. 
+We are in desperate need for affordable housing for people that are below the poverty line and experiencing housing insecurity. We will address the issue of accessing affordable housing by showing what areas have affordable housing and what areas don't. 
 
 ## Who is being empowered by your mapplication?
 
