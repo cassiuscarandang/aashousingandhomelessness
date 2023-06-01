@@ -4,7 +4,7 @@
 
 ### What social problem is being addressed?
 
-UCLA Students are at high risk of homelessness and housing insecurity in face of high costs of housing. Although studies estimate 1 in 20 UC Students are experiencing homelessness, there is also a lack of community stories being shared in regard to the lived experiences of housing insecure students (Aziz, 2020). This project aims to address the problem's of student housing insecurity, unaffordability, and homelessness by sharing the stories of affected UCLA students. 
+UCLA Students are at high risk of homelessness and housing insecurity in the face of high housing costs. Westwood is reportedly the most expensive place to rent in California with the average apartment renting for more than $4800, and a University of California study estimates that 1 in 20 UC Students are experiencing homelessness. While UCLA does conducts surveys that screen student eligibility in accessing housing resources, there is currently no systematic collection of student voices and experiences in the topic housing insecurity. This mapplication aims to offer a meaningful collection in order to accurately reflect and represent student experiences where there is an absence of student voices. This project aims to address the problem's of student housing insecurity, unaffordability, and homelessness by sharing the stories of affected UCLA students. 
 
 ### Who is being empowered by your mapplication?
 
