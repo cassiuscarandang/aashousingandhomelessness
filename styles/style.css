@@ -19,7 +19,7 @@ header{
 
 .main{
     grid-area: main_content;
-    grid-template-columns: .25fr 1fr 1fr;
+    grid-template-columns: .25fr 1fr .5fr;
     grid-template-areas: "about main_map content";
     display: grid;
 }
@@ -29,13 +29,14 @@ header{
     margin: 8px;
     background-color: #aee1e7;
     cursor: pointer;
+    font-size: 10pt;
 }
 
 #contents{
     grid-area: content;
     display: grid;
-    grid-template-rows: 3fr 1fr; 
-    grid-template-areas: "buttonHome" "survey"
+    grid-template-rows: .2fr 3fr 1fr; 
+    grid-template-areas: "title2" "buttonHome" "survey"
 }
 
 #the_map{
@@ -64,5 +65,5 @@ header{
 #placeForButtons{
     grid-area: buttonHome;
     display:grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
 }

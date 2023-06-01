@@ -1,12 +1,12 @@
 // declare variables
 let mapOptions = {'center': [34.0709,-118.444],'zoom':5}
 
-let vaccinated = L.featureGroup();
-let nonVaccinated = L.featureGroup();
+let oncampus = L.featureGroup();
+let offcampus = L.featureGroup();
 
 let layers = {
-    "Vaccinated Respondent": vaccinated,
-    "Unvaccinated Respondent": nonVaccinated
+    "On Campus Student": oncampus,
+    "Off Campus Student": offcampus
 }
 
 let circleOptions = {
@@ -18,7 +18,7 @@ let circleOptions = {
     fillOpacity: 0.8
 }
 
-const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNq8_prhrSwK3CnY2pPptqMyGvc23Ckc5MCuGMMKljW-dDy6yq6j7XAT4m6GG69CISbD6kfBF0-ypS/pub?output=csv"
+const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHDPfOGu2VPqApARI9h-tgQrhFjxyrs83mz5dpl3UE_tb8qhotj47wU17Hnch5D66MeejMCfaC3_VK/pub?output=csv"
 
 // define the leaflet map
 const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
@@ -34,15 +34,15 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 Esri_WorldGrayCanvas.addTo(map);
 
 function addMarker(data){
-    if(data['Have you been vaccinated?'] == "Yes"){
+    if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        vaccinated.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Vaccinated</h2>`))
-        createButtons(data.lat,data.lng,data['Where did you get vaccinated?'])
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
     else{
         circleOptions.fillColor = "blue"
-        nonVaccinated.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Non-Vaccinated</h2>`))
-        createButtons(data.lat,data.lng,data['Where did you get vaccinated?'])
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
     }
     return data
 }
@@ -74,9 +74,9 @@ function processData(results){
         console.log(data)
         addMarker(data)
     })
-    vaccinated.addTo(map) // add our layers after markers have been made
-    nonVaccinated.addTo(map) // add our layers after markers have been made  
-    let allLayers = L.featureGroup([vaccinated,nonVaccinated]);
+    oncampus.addTo(map) // add our layers after markers have been made
+    offcampus.addTo(map) // add our layers after markers have been made  
+    let allLayers = L.featureGroup([oncampus,offcampus]);
     map.fitBounds(allLayers.getBounds());
 }
 
