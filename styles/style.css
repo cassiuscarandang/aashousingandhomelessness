@@ -2,7 +2,7 @@ body{
     display: grid;
     grid-template-rows: 50px auto auto;
     grid-template-areas: "header" "main_content" "footer";
-    background-color: aqua;
+    background-color: rgb(255, 255, 255);
     gap: 10px;
 }
 
@@ -10,6 +10,7 @@ header{
     grid-area: header;
     justify-self: center;
     align-self: center;
+    font-size: 40pt;
 }
 
 #footer{
@@ -18,9 +19,16 @@ header{
 
 .main{
     grid-area: main_content;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "main_map content";
+    grid-template-columns: .25fr 1fr 1fr;
+    grid-template-areas: "about main_map content";
     display: grid;
+}
+
+#About{
+    padding: 10px 32px;
+    margin: 8px;
+    background-color: #aee1e7;
+    cursor: pointer;
 }
 
 #contents{
