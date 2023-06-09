@@ -41,7 +41,7 @@ header{
 .main{
     grid-area: main_content;
     grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.25fr .75fr;
     grid-template-areas: "main_map content";
     display: grid;
 }
