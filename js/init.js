@@ -49,27 +49,27 @@ function addMarker(data){
         }
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
     else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Graduate Student</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
     else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Commuter</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
     else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Unhoused/Homeless</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
     else{
         circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
+        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Other</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
     }
     return data
