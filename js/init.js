@@ -81,3 +81,142 @@ function processData(results){
 }
 
 loadData(dataUrl)
+
+// Scatter Plot - Chart 1
+// Set Dimensions
+const xSize = 500; 
+const ySize = 500;
+const margin = 40;
+const xMax = xSize - margin*2;
+const yMax = ySize - margin*2;
+
+// Create Random Points
+const numPoints = 100;
+const data = [];
+for (let i = 0; i < numPoints; i++) {
+  data.push([Math.random() * xMax, Math.random() * yMax]);
+}
+
+// Append SVG Object to the Page
+const svg = d3.select("#myPlot")
+  .append("svg")
+  .append("g")
+  .attr("transform","translate(" + margin + "," + margin + ")");
+
+// X Axis
+const x = d3.scaleLinear()
+  .domain([0, 500])
+  .range([0, xMax]);
+
+svg.append("g")
+  .attr("transform", "translate(0," + yMax + ")")
+  .call(d3.axisBottom(x));
+
+// Y Axis
+const y = d3.scaleLinear()
+  .domain([0, 500])
+  .range([ yMax, 0]);
+
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+// Dots
+svg.append('g')
+  .selectAll("dot")
+  .data(data).enter()
+  .append("circle")
+  .attr("cx", function (d) { return d[0] } )
+  .attr("cy", function (d) { return d[1] } )
+  .attr("r", 3)
+  .style("fill", "Red");
+
+
+// Pie Chart - Chart 2
+
+// set the dimensions and margins of the graph
+var width = 450
+    height = 450
+    margin2 = 40
+
+// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+var radius = Math.min(width, height) / 2 - margin2
+
+// append the svg object to the div called 'my_dataviz'
+var svg2 = d3.select("#chart2")
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+// Create dummy data
+var data2 = {a: 9, b: 20, c:30, d:8, e:12}
+
+// set the color scale
+var color = d3.scaleOrdinal()
+  .domain(data2)
+  .range(d3.schemeSet2);
+
+// Compute the position of each group on the pie:
+var pie = d3.pie()
+  .value(function(d) {return d.value; })
+var data_ready = pie(d3.entries(data2))
+// Now I know that group A goes from 0 degrees to x degrees and so on.
+
+// shape helper to build arcs:
+var arcGenerator = d3.arc()
+  .innerRadius(0)
+  .outerRadius(radius)
+
+// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+svg2
+  .selectAll('mySlices')
+  .data(data_ready)
+  .enter()
+  .append('path')
+    .attr('d', arcGenerator)
+    .attr('fill', function(d){ return(color(d.data.key)) })
+    .attr("stroke", "black")
+    .style("stroke-width", "2px")
+    .style("opacity", 0.7)
+
+// Now add the annotation. Use the centroid method to get the best coordinates
+svg2
+  .selectAll('mySlices')
+  .data(data_ready)
+  .enter()
+  .append('text')
+  .text(function(d){ return "grp " + d.data.key})
+  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+  .style("text-anchor", "middle")
+  .style("font-size", 17)
+
+  // Word Cloud
+
+  function createWordCloud(words) {
+    d3.select("#chart3")
+      .append("svg")
+      .attr("width", 500)
+      .attr("height", 500)
+      .append("g")
+      .attr("transform", "translate(250,250)")
+      .selectAll("text")
+      .data(words)
+      .enter()
+      .append("text")
+      .style("font-size", function(d) { return d.size + "px"; })
+      .style("fill", function(d, i) { return d3.schemeCategory10[i % 10]; })
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) {
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      })
+      .text(function(d) { return d.text; });
+  }
+
+  var words = [
+    { text: "Hello", size: 20, x: 0, y: 0, rotate: 0 },
+    { text: "World", size: 30, x: 50, y: 50, rotate: 45 },
+    // Add more word objects as needed
+  ];
+  
+  createWordCloud(words);
