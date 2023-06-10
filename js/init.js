@@ -3,10 +3,18 @@ let mapOptions = {'center': [34.0709,-118.444],'zoom':5}
 
 let oncampus = L.featureGroup();
 let offcampus = L.featureGroup();
+let offcampusgrad = L.featureGroup();
+let commuter = L.featureGroup();
+let unhoused = L.featureGroup();
+let other = L.featureGroup();
 
 let layers = {
-    "On Campus Student": oncampus,
-    "Off Campus Student": offcampus
+    "On Campus Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='red' /></svg>": oncampus,
+    "Off Campus Student (Living in Westwood) <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='blue' /></svg>": offcampus,
+    "Off Campus Graduate Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='yellow' /></svg>": offcampusgrad,
+    "Off Campus Commuter Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='green' /></svg>": commuter,
+    "Homeless/Unhoused Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='purple' /></svg>": unhoused,
+    "Other <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='black' /></svg>": other
 }
 
 let circleOptions = {
@@ -24,7 +32,7 @@ const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHDPfOGu2VPqAp
 const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
 
 // add layer control box
-L.control.layers(null,layers).addTo(map)
+L.control.layers(null,layers, {collapsed:false}).addTo(map)
 
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -39,9 +47,29 @@ function addMarker(data){
         oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
         }
-    else{
+    else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        }
+    else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
+        circleOptions.fillColor = "yellow"
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        }
+    else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
+        circleOptions.fillColor = "green"
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        }
+    else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
+        circleOptions.fillColor = "purple"
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
+        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        }
+    else{
+        circleOptions.fillColor = "black"
+        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
         createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
     }
     return data
@@ -76,7 +104,11 @@ function processData(results){
     })
     oncampus.addTo(map) // add our layers after markers have been made
     offcampus.addTo(map) // add our layers after markers have been made  
-    let allLayers = L.featureGroup([oncampus,offcampus]);
+    offcampusgrad.addTo(map) // add our layers after markers have been made
+    commuter.addTo(map) // add our layers after markers have been made 
+    unhoused.addTo(map) // add our layers after markers have been made
+    other.addTo(map) // add our layers after markers have been made 
+    let allLayers = L.featureGroup([oncampus,offcampus,offcampusgrad,commuter,unhoused,other]);
     map.fitBounds(allLayers.getBounds());
 }
 
