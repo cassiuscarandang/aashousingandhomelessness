@@ -22,8 +22,15 @@ header{
 
 #title{
     text-align: center;
-    line-height: 10px;
-    
+    line-height: 10px; ; 
+}
+
+#title2{
+    text-align: center; 
+}
+
+#title3{
+    text-align: center
 }
 
 #logo{
@@ -38,29 +45,57 @@ header{
     grid-area: footer;
 }
 
-.main{
-    grid-area: main_content;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1.25fr .75fr;
-    grid-template-areas: "main_map content";
-    display: grid;
+#panel{
+    display:grid;
+    grid-area: panel;
+    grid-template-rows: .2fr 3fr; 
+    grid-template-areas: "title2" "buttonHome";
 }
 
-#contents{
-    grid-area: content;
+#survmap{
+    display:grid;
+    grid-area: survmap;
+    grid-template-columns: 1.25fr .75fr;
+    grid-template-areas: "main_map panel";
+
+}
+
+#overviewstats{
     display: grid;
-    grid-template-rows: .2fr 3fr 1fr; 
-    grid-template-areas: "title2" "buttonHome" "survey"
+    grid-area: stats;
+    grid-template-rows: .1fr 1fr;
+    grid-template-areas: "title3" "charts";
+}
+
+#charts{
+    display: grid;
+    grid-area: charts;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "chart1 chart2 chart3";
+}
+
+#chart1{
+    text-align: center;
+}
+
+#chart2{
+    text-align: center;
+}
+
+#chart3{
+    text-align: center;
+}
+
+.main{
+    grid-area: main_content;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-areas: "survmap" "stats";
 }
 
 #the_map{
     height:80vh;
     grid-area: main_map;
-}
-
-#theSurvey{
-    grid-area: survey;
-    justify-self: center; /* added this to center the button in the div */
 }
 
 /* css for the button */
