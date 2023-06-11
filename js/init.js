@@ -120,7 +120,7 @@ function loadData(url){
 
 function processData(results){
     console.log(results);
-    var columnData = results.data.map(data => data['Where do you currently live?']); // Replace 'columnName' with the actual column name
+    var columnData = results.data.map(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?']); // Replace 'columnName' with the actual column name
   
       var frequencies = {};
       columnData.forEach(response => {
@@ -213,19 +213,19 @@ function piechart(data, width, height, margin) {
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
   var color = d3.scaleOrdinal()
-    .domain(data.map(d => d.key)) // Use data.map() to extract the keys from data
+    .domain(data.map(d => d.key))
     .range(d3.schemeSet2);
 
   var pie = d3.pie()
     .value(function(d) { return d.value; });
 
-  var data_ready = pie(data); // Use data directly instead of d3.entries(data)
+  var data_ready = pie(data);
 
   var arcGenerator = d3.arc()
     .innerRadius(0)
     .outerRadius(radius);
 
-  svg2.selectAll('mySlices')
+  var slices = svg2.selectAll('mySlices')
     .data(data_ready)
     .enter()
     .append('path')
@@ -235,7 +235,7 @@ function piechart(data, width, height, margin) {
     .style("stroke-width", "2px")
     .style("opacity", 0.7);
 
-  svg2.selectAll('mySlices')
+  var labels = svg2.selectAll('mySlices')
     .data(data_ready)
     .enter()
     .append('text')
@@ -243,9 +243,23 @@ function piechart(data, width, height, margin) {
     .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")"; })
     .style("text-anchor", "middle")
     .style("font-size", 17);
+
+  slices.on("pointerover", function(d) {
+    d3.select(this)
+      .style("opacity", 1.0);
+  })
+  .on("pointerout", function(d) {
+    d3.select(this)
+      .style("opacity", 0.7);
+  })
+  .on("click", function(d) {
+    console.log("Clicked on group:", d.data.key);
+  });
 }
 
 
+  // Function to wrap text within a specified width
+  
 // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
 
 
