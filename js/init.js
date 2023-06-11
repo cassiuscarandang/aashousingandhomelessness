@@ -119,7 +119,23 @@ function loadData(url){
 }
 
 function processData(results){
-    console.log(results)
+    console.log(results);
+    var columnData = results.data.map(data => data['Where do you currently live?']); // Replace 'columnName' with the actual column name
+  
+      var frequencies = {};
+      columnData.forEach(response => {
+          if (frequencies.hasOwnProperty(response)) {
+              frequencies[response]++;
+        } else {
+              frequencies[response] = 1;
+        }
+  });
+    var data2 = Object.keys(frequencies).map(key => ({
+    key: key,
+    value: frequencies[key]
+  }));
+    console.log(data2)
+    piechart(data2, 450, 450, 40)
     results.data.forEach(data => {
         console.log(data)
         addMarker(data)
@@ -187,63 +203,70 @@ svg.append('g')
 
 // Pie Chart - Chart 2
 
-// set the dimensions and margins of the graph
-var width = 450
-    height = 450
-    margin2 = 40
-
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-var radius = Math.min(width, height) / 2 - margin2
-
-// append the svg object to the div called 'my_dataviz'
-var svg2 = d3.select("#chart2")
-  .append("svg")
+function piechart(data, width, height, margin) {
+  var radius = Math.min(width, height) / 2 - margin;
+  var svg2 = d3.select("#chart2")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+  var color = d3.scaleOrdinal()
+    .domain(data.map(d => d.key)) // Use data.map() to extract the keys from data
+    .range(d3.schemeSet2);
+
+  var pie = d3.pie()
+    .value(function(d) { return d.value; });
+
+  var data_ready = pie(data); // Use data directly instead of d3.entries(data)
+
+  var arcGenerator = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
+
+  svg2.selectAll('mySlices')
+    .data(data_ready)
+    .enter()
+    .append('path')
+    .attr('d', arcGenerator)
+    .attr('fill', function(d) { return color(d.data.key); })
+    .attr("stroke", "black")
+    .style("stroke-width", "2px")
+    .style("opacity", 0.7);
+
+  svg2.selectAll('mySlices')
+    .data(data_ready)
+    .enter()
+    .append('text')
+    .text(function(d) { return d.data.key; })
+    .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")"; })
+    .style("text-anchor", "middle")
+    .style("font-size", 17);
+}
+
+
+// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+
+
+// append the svg object to the div called 'my_dataviz'
+
+
 // Create dummy data
-var data2 = {a: 9, b: 20, c:30, d:8, e:12}
+
 
 // set the color scale
-var color = d3.scaleOrdinal()
-  .domain(data2)
-  .range(d3.schemeSet2);
+
 
 // Compute the position of each group on the pie:
-var pie = d3.pie()
-  .value(function(d) {return d.value; })
-var data_ready = pie(d3.entries(data2))
+
 // Now I know that group A goes from 0 degrees to x degrees and so on.
 
 // shape helper to build arcs:
-var arcGenerator = d3.arc()
-  .innerRadius(0)
-  .outerRadius(radius)
+
 
 // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-svg2
-  .selectAll('mySlices')
-  .data(data_ready)
-  .enter()
-  .append('path')
-    .attr('d', arcGenerator)
-    .attr('fill', function(d){ return(color(d.data.key)) })
-    .attr("stroke", "black")
-    .style("stroke-width", "2px")
-    .style("opacity", 0.7)
-
-// Now add the annotation. Use the centroid method to get the best coordinates
-svg2
-  .selectAll('mySlices')
-  .data(data_ready)
-  .enter()
-  .append('text')
-  .text(function(d){ return "grp " + d.data.key})
-  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
-  .style("text-anchor", "middle")
-  .style("font-size", 17)
+  
 
   // Word Cloud
 
