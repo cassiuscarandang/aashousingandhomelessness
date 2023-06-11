@@ -18,7 +18,7 @@ let layers = {
 }
 
 let circleOptions = {
-    radius: 4,
+    radius: 20,
     fillColor: "#ff7800",
     color: "#000",
     weight: 1,
