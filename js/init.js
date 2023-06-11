@@ -60,8 +60,9 @@ function addMarker(data){
                 <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
     if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('click', eventhandler));
         oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('click', eventhandler));
+        
   }
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
