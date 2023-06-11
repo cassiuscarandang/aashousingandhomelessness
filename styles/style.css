@@ -15,7 +15,7 @@ header{
 #heading{
     display: grid;
     grid-area: heading;
-    grid-template-columns: .30fr .9fr .40fr;
+    grid-template-columns: .30fr 1fr .30fr;
     grid-template-areas: "logo title navbar";
 }
 
