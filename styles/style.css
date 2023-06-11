@@ -79,7 +79,7 @@ header{
     display: grid;
     grid-area: charts;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: "chart2 chart1 chart3";
+    grid-template-areas: "chart1 chart2 chart3";
 }
 
 #chart1{

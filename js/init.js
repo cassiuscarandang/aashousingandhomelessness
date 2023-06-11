@@ -201,11 +201,11 @@ svg.append('g')
   .style("fill", "Red");
 
 
-// Pie Chart - Chart 2
+// Pie Chart - Chart 1
 
 function piechart(data, width, height, margin) {
   var radius = Math.min(width, height) / 2 - margin;
-  var svg2 = d3.select("#chart2")
+  var svg2 = d3.select("#chart1")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -244,43 +244,32 @@ function piechart(data, width, height, margin) {
     .style("text-anchor", "middle")
     .style("font-size", 17);
 
-  slices.on("pointerover", function(d) {
-    d3.select(this)
-      .style("opacity", 1.0);
-  })
-  .on("pointerout", function(d) {
-    d3.select(this)
-      .style("opacity", 0.7);
-  })
-  .on("click", function(d) {
-    console.log("Clicked on group:", d.data.key);
-  });
+    slices.on("pointerover", function(d) {
+      d3.select(this)
+        .style("opacity", 1.0);
+  
+      // Calculate percentage
+      var percentage = ((d.data.value / d3.sum(data, function(d) { return d.value; })) * 100).toFixed(0);
+  
+      // Show pop-up with label and percentage
+      d3.select("#chart1")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("left", (d3.event.pageX + 10) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .text(percentage + "%" + " of respondents answered " + d.data.key);
+    })
+    .on("pointerout", function(d) {
+      d3.select(this)
+        .style("opacity", 0.7);
+  
+      // Remove the pop-up
+      d3.select(".tooltip").remove();
+    })
+    .on("click", function(d) {
+      console.log("Clicked on group:", d.data.key);
+    });
 }
-
-
-  // Function to wrap text within a specified width
-  
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-
-
-// append the svg object to the div called 'my_dataviz'
-
-
-// Create dummy data
-
-
-// set the color scale
-
-
-// Compute the position of each group on the pie:
-
-// Now I know that group A goes from 0 degrees to x degrees and so on.
-
-// shape helper to build arcs:
-
-
-// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-  
 
   // Word Cloud
 
