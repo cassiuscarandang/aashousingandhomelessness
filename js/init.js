@@ -1,5 +1,5 @@
 // declare variables
-let mapOptions = {'center': [34.0709,-118.444],'zoom':5}
+let mapOptions = {'center': [34.02420334343204, -118.27631488157236],'zoom':10}
 
 let oncampus = L.featureGroup();
 let offcampus = L.featureGroup();
@@ -42,36 +42,58 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 Esri_WorldGrayCanvas.addTo(map);
 
 function addMarker(data){
+   let survresponses = `<h2>What is your current living situation?</h2>
+                <p>${data['Where do you currently live?']}</p> 
+                <h2>What are your experiences with housing insecurity and affordability at UCLA?</h2>
+                <p>${data['What are your experiences with housing insecurity and affordability at UCLA?']}</p>
+                <h2>Please share any difficulties you’ve had searching for off-campus housing, if any.</h2>
+                <p>${data['Please share any difficulties you’ve had searching for off-campus housing, if any.']}</p>
+                <h2>Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?</h2>
+                <p>${data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?']}</p>
+                <h2>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h2>
+                <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
     if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Graduate Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Commuter</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Unhoused/Homeless</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else{
         circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Other</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
-    }
+        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
+        }
     return data
 }
 

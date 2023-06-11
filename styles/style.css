@@ -20,6 +20,14 @@ header{
 
 }
 
+#navbar a {
+    margin-right: 10px;
+}
+
+#navbar{
+    padding: 10px;
+}
+
 #title{
     text-align: center;
     line-height: 10px; ; 
@@ -115,4 +123,12 @@ header{
     grid-area: buttonHome;
     display:grid;
     grid-template-columns: repeat(1, 1fr);
+}
+
+#survdata{
+    border:1px solid black;
+    padding: 10px;
+}
+#survdata h2{
+    font-size: 12pt;
 }
