@@ -19,9 +19,17 @@ header{
     grid-template-areas: "logo title navbar";
 }
 
-#placeforlinks{
+#h4a_logo{
+    max-width: 80%;
+    max-height: 80%;
+}
+
+#logo{
     text-align: center;
-    padding-top: 8%;
+}
+
+#title{
+    text-align: center; 
 }
 
 #navbar{
@@ -30,37 +38,56 @@ header{
     padding-top: 3%;
 }
 
-#title{
-    text-align: center;
-    line-height: 10px; ; 
+#homeButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 8vh;
+    height: 4vh
 }
 
-#title2{
-    text-align: center; 
+#aboutButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 8vh;
+    height: 4vh;
+    margin-left: 10%;
 }
 
-#title3{
-    text-align: center
+#surveyButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 18vh;
+    height: 4vh;
+    font-size: 10pt;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
-#logo{
-    text-align: center;
-}
-#h4a_logo{
-    max-width: 80%;
-    max-height: 80%;
-}
-
-#footer{
-    grid-area: footer;
+.main{
+    grid-area: main_content;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-areas: "buttonHome" "survmap" "stats";
 }
 
-#panel{
-    display:grid;
-    grid-area: panel;
-    grid-template-rows: .2fr 3fr; 
-    grid-template-areas: "title2" "buttonHome";
-    margin-left: 40px;
+button{
+    margin: 10px;
+    padding: 10px
 }
 
 #survmap{
@@ -71,11 +98,47 @@ header{
 
 }
 
+#the_map{
+    height:80vh;
+    grid-area: main_map;
+}
+
+#panel{
+    display:grid;
+    grid-area: panel;
+    grid-template-rows: .2fr 3fr; 
+    grid-template-areas: "title2" "survdata";
+    margin-left: 40px;
+}
+
+#survdata{
+    border:1px solid black;
+    padding: 10px;
+}
+
+#survdata h2{
+    font-size: 12pt;
+}
+
+#title2{
+    text-align: center; 
+}
+
+#placeForButtons{
+    grid-area: buttonHome;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 #overviewstats{
     display: grid;
     grid-area: stats;
     grid-template-rows: .1fr 1fr;
     grid-template-areas: "title3" "charts";
+}
+
+#title3{
+    text-align: center
 }
 
 #charts{
@@ -97,93 +160,6 @@ header{
     text-align: center;
 }
 
-.main{
-    grid-area: main_content;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-areas: "buttonHome" "survmap" "stats";
-}
-
-#the_map{
-    height:80vh;
-    grid-area: main_map;
-}
-
-/* css for the button */
-#surveyButton {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: #c8cacd;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 18vh;
-    height: 4vh;
-    font-size: 10pt;
-    margin-left: 10%;
-    margin-right: 10%;
-  }
-  
-  #surveyButton:hover {
-    background-color: #23527c;
-  }
-
-  #homeButton {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: #c8cacd;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 8vh;
-    height: 4vh
-  }
-
-  #aboutButton {
-    display: inline-block;
-    padding: 10px 16px;
-    background-color: #c8cacd;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 8vh;
-    height: 4vh;
-    margin-left: 10%;
-  }
-  
-  #surveyButton:hover {
-    background-color: #23527c;
-  }
-
-#placeForButtons{
-    grid-area: buttonHome;
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-#survdata{
-    border:1px solid black;
-    padding: 10px;
-}
-#survdata h2{
-    font-size: 12pt;
-}
-
-button2{
-    font-family: 'Inter', sans-serif;
-    background-color: #c2c2c2;
-    border-radius: 12px;
-    border-width: 0;
-    color: #333333;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    list-style: none;
-    margin: 8px;
-    padding: 10px 12px;
-    text-align: center;
-    vertical-align: baseline;
+#footer{
+    grid-area: footer;
 }
