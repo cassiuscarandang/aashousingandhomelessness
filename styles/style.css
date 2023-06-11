@@ -101,7 +101,7 @@ header{
     grid-area: main_content;
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-areas: "survmap" "stats";
+    grid-template-areas: "buttonHome" "survmap" "stats";
 }
 
 #the_map{
@@ -161,7 +161,7 @@ header{
 #placeForButtons{
     grid-area: buttonHome;
     display:grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr 1fr;
 }
 
 #survdata{

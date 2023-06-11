@@ -42,6 +42,7 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 Esri_WorldGrayCanvas.addTo(map);
 
 function addMarker(data){
+    var event = ('ontouchstart' in window) ? 'touchstart' : 'mouseover';
    let survresponses = `<h2>What is your current living situation?</h2>
                 <p>${data['Where do you currently live?']}</p> 
                 <h2>What are your experiences with housing insecurity and affordability at UCLA?</h2>
@@ -54,7 +55,7 @@ function addMarker(data){
                 <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
     if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on(event, function(){
           const markerDataPanel = document.getElementById('survdata');
           markerDataPanel.innerHTML = survresponses;
   }));
@@ -110,8 +111,8 @@ function createButtons(lat,lng,title,zoom){
     spaceForButtons.appendChild(newButton);//this adds the button to our page.
 }
 
-createButtons(0,0,'test',8)
-createButtons(34.02420334343204, -118.27631488157236, 'Westwood', 14)
+createButtons(34.06692604858565, -118.44572041334482, 'Westwood', 15)
+createButtons(34.62264058741811, -117.03878205478009,'Beyond Westwood',8)
 
 function loadData(url){
     Papa.parse(url, {
