@@ -1,5 +1,5 @@
 // declare variables
-let mapOptions = {'center': [34.0709,-118.444],'zoom':5}
+let mapOptions = {'center': [34.02420334343204, -118.27631488157236],'zoom':10}
 
 let oncampus = L.featureGroup();
 let offcampus = L.featureGroup();
@@ -42,51 +42,76 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 Esri_WorldGrayCanvas.addTo(map);
 
 function addMarker(data){
+   let survresponses = `<h2>What is your current living situation?</h2>
+                <p>${data['Where do you currently live?']}</p> 
+                <h2>What are your experiences with housing insecurity and affordability at UCLA?</h2>
+                <p>${data['What are your experiences with housing insecurity and affordability at UCLA?']}</p>
+                <h2>Please share any difficulties you’ve had searching for off-campus housing, if any.</h2>
+                <p>${data['Please share any difficulties you’ve had searching for off-campus housing, if any.']}</p>
+                <h2>Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?</h2>
+                <p>${data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?']}</p>
+                <h2>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h2>
+                <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
     if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>On Campus Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Off Campus Graduate Student</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Commuter</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Unhoused/Homeless</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
         }
     else{
         circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).bindPopup(`<h2>Other</h2>`))
-        createButtons(data.lat,data.lng,data['What are your experiences with housing insecurity and affordability at UCLA?'])
-    }
+        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', function(){
+          const markerDataPanel = document.getElementById('survdata');
+          markerDataPanel.innerHTML = survresponses;
+  }));
+        }
     return data
 }
 
-function createButtons(lat,lng,title){
+function createButtons(lat,lng,title,zoom){
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
     newButton.innerHTML = title; // gives the button a title
     newButton.setAttribute("lat",lat); // sets the latitude 
     newButton.setAttribute("lng",lng); // sets the longitude 
     newButton.addEventListener('click', function(){
-        map.flyTo([lat,lng]); //this is the flyTo from Leaflet
+        map.flyTo([lat,lng],zoom); //this is the flyTo from Leaflet
     })
     const spaceForButtons = document.getElementById('placeForButtons')
     spaceForButtons.appendChild(newButton);//this adds the button to our page.
 }
+
+createButtons(0,0,'test',8)
+createButtons(34.02420334343204, -118.27631488157236, 'Westwood', 14)
 
 function loadData(url){
     Papa.parse(url, {
@@ -97,7 +122,43 @@ function loadData(url){
 }
 
 function processData(results){
-    console.log(results)
+    console.log(results);
+    var pieData = results.data.map(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?']); // Replace 'columnName' with the actual column name
+    var barData = results.data.map(data => data['Where do you currently live?']); // Replace 'columnName' with the actual column name
+    var wrd_rsp = results.data.map(data => data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']);
+    var values = wrd_rsp.filter(response => response !== undefined);
+    const concatenatedValues = values.join(" ");
+    console.log(concatenatedValues)
+    var frequencies = {};
+      pieData.forEach(response => {
+          if (frequencies.hasOwnProperty(response)) {
+              frequencies[response]++;
+        } else {
+              frequencies[response] = 1;
+        }
+  });
+    var data2 = Object.keys(frequencies).map(key => ({
+    key: key,
+    value: frequencies[key]
+  }));
+
+  var counts = {};
+  barData.forEach(response => {
+      if (counts.hasOwnProperty(response)) {
+          counts[response]++;
+    } else {
+          counts[response] = 1;
+    }
+});
+var data3 = Object.keys(counts).map(key => ({
+key: key,
+value: counts[key]
+}));
+
+    console.log(data2)
+    console.log(data3)
+    piechart(data2, 450, 450, 40)
+    barplot(data3)
     results.data.forEach(data => {
         console.log(data)
         addMarker(data)
@@ -114,141 +175,169 @@ function processData(results){
 
 loadData(dataUrl)
 
-// Scatter Plot - Chart 1
-// Set Dimensions
-const xSize = 500; 
-const ySize = 500;
-const margin = 40;
-const xMax = xSize - margin*2;
-const yMax = ySize - margin*2;
+// Pie Chart - Chart 1
 
-// Create Random Points
-const numPoints = 100;
-const data = [];
-for (let i = 0; i < numPoints; i++) {
-  data.push([Math.random() * xMax, Math.random() * yMax]);
-}
-
-// Append SVG Object to the Page
-const svg = d3.select("#myPlot")
-  .append("svg")
-  .append("g")
-  .attr("transform","translate(" + margin + "," + margin + ")");
-
-// X Axis
-const x = d3.scaleLinear()
-  .domain([0, 500])
-  .range([0, xMax]);
-
-svg.append("g")
-  .attr("transform", "translate(0," + yMax + ")")
-  .call(d3.axisBottom(x));
-
-// Y Axis
-const y = d3.scaleLinear()
-  .domain([0, 500])
-  .range([ yMax, 0]);
-
-svg.append("g")
-  .call(d3.axisLeft(y));
-
-// Dots
-svg.append('g')
-  .selectAll("dot")
-  .data(data).enter()
-  .append("circle")
-  .attr("cx", function (d) { return d[0] } )
-  .attr("cy", function (d) { return d[1] } )
-  .attr("r", 3)
-  .style("fill", "Red");
-
-
-// Pie Chart - Chart 2
-
-// set the dimensions and margins of the graph
-var width = 450
-    height = 450
-    margin2 = 40
-
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-var radius = Math.min(width, height) / 2 - margin2
-
-// append the svg object to the div called 'my_dataviz'
-var svg2 = d3.select("#chart2")
-  .append("svg")
+function piechart(data, width, height, margin) {
+  var radius = Math.min(width, height) / 2 - margin;
+  var svg2 = d3.select("#chart1")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// Create dummy data
-var data2 = {a: 9, b: 20, c:30, d:8, e:12}
+  var color = d3.scaleOrdinal()
+    .domain(data.map(d => d.key))
+    .range(d3.schemeSet2);
 
-// set the color scale
-var color = d3.scaleOrdinal()
-  .domain(data2)
-  .range(d3.schemeSet2);
+  var pie = d3.pie()
+    .value(function(d) { return d.value; });
 
-// Compute the position of each group on the pie:
-var pie = d3.pie()
-  .value(function(d) {return d.value; })
-var data_ready = pie(d3.entries(data2))
-// Now I know that group A goes from 0 degrees to x degrees and so on.
+  var data_ready = pie(data);
 
-// shape helper to build arcs:
-var arcGenerator = d3.arc()
-  .innerRadius(0)
-  .outerRadius(radius)
+  var arcGenerator = d3.arc()
+    .innerRadius(0)
+    .outerRadius(radius);
 
-// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-svg2
-  .selectAll('mySlices')
-  .data(data_ready)
-  .enter()
-  .append('path')
+  var slices = svg2.selectAll('mySlices')
+    .data(data_ready)
+    .enter()
+    .append('path')
     .attr('d', arcGenerator)
-    .attr('fill', function(d){ return(color(d.data.key)) })
+    .attr('fill', function(d) { return color(d.data.key); })
     .attr("stroke", "black")
     .style("stroke-width", "2px")
-    .style("opacity", 0.7)
+    .style("opacity", 0.7);
 
-// Now add the annotation. Use the centroid method to get the best coordinates
-svg2
-  .selectAll('mySlices')
-  .data(data_ready)
-  .enter()
-  .append('text')
-  .text(function(d){ return "grp " + d.data.key})
-  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
-  .style("text-anchor", "middle")
-  .style("font-size", 17)
+  var labels = svg2.selectAll('mySlices')
+    .data(data_ready)
+    .enter()
+    .append('text')
+    .text(function(d) { return d.data.key; })
+    .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")"; })
+    .style("text-anchor", "middle")
+    .style("font-size", 17);
 
-  // Word Cloud
-
-  function createWordCloud(words) {
-    d3.select("#chart3")
-      .append("svg")
-      .attr("width", 500)
-      .attr("height", 500)
-      .append("g")
-      .attr("transform", "translate(250,250)")
-      .selectAll("text")
-      .data(words)
-      .enter()
-      .append("text")
-      .style("font-size", function(d) { return d.size + "px"; })
-      .style("fill", function(d, i) { return d3.schemeCategory10[i % 10]; })
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      })
-      .text(function(d) { return d.text; });
-  }
-
-  var words = [
-    { text: "Hello", size: 20, x: 0, y: 0, rotate: 0 },
-    { text: "World", size: 30, x: 50, y: 50, rotate: 45 },
-    // Add more word objects as needed
-  ];
+    slices.on("pointerover", function(d) {
+      d3.select(this)
+        .style("opacity", 1.0);
   
-  createWordCloud(words);
+      // Calculate percentage
+      var percentage = ((d.value / d3.sum(data, function(d) { return d.value; })) * 100).toFixed(0);
+  
+      // Show pop-up with label and percentage
+      d3.select("#chart1")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("left", (d3.event.pageX + 10) + "px")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .text(percentage + "%" + " of people answered " + d.data.key);
+    })
+    .on("pointerout", function(d) {
+      d3.select(this)
+        .style("opacity", 0.7);
+  
+      // Remove the pop-up
+      d3.select(".tooltip").remove();
+    })
+    .on("click", function(d) {
+      console.log("Clicked on group:", d.data.key);
+    });
+}
+
+// Bar Plot - Chart 2
+
+function barplot(data) {
+  var margin = { top: 30, right: 30, bottom: 60, left: 30 },
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+  // Determine the highest value in the data
+  var maxValue = d3.max(data, function (d) {
+    return d.value;
+  });
+
+  // Set the y-axis domain based on the highest value
+  var y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
+
+  // append the svg object to the body of the page
+  var svg = d3
+    .select("#chart2")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // sort data
+  data.sort(function (b, a) {
+    return a.Value - b.Value;
+  });
+
+  // X axis
+  var x = d3
+    .scaleBand()
+    .range([0, width])
+    .domain(data.map(function (d) {
+      return d.key;
+    }))
+    .padding(0.2);
+  var xAxis = svg
+    .append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Wrap x-axis labels
+  xAxis
+    .selectAll(".tick text")
+    .call(wrapText, x.bandwidth());
+
+  // Y axis
+  svg.append("g").call(d3.axisLeft(y));
+
+  // Bars
+  svg
+    .selectAll("mybar")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", function (d) {
+      return x(d.key);
+    })
+    .attr("y", function (d) {
+      return y(d.value);
+    })
+    .attr("width", x.bandwidth())
+    .attr("height", function (d) {
+      return height - y(d.value);
+    })
+    .attr("fill", "#69b3a2");
+}
+
+// Helper function to wrap text within a specified width
+function wrapText(text, width) {
+  text.each(function () {
+    var text = d3.select(this),
+      words = text.text().split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      lineHeight = 1.1, // Adjust as needed
+      y = text.attr("y"),
+      dy = parseFloat(text.attr("dy") || 0),
+      tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+
+    while ((word = words.pop())) {
+      line.push(word);
+      tspan.text(line.join(" "));
+
+      if (tspan.node().getComputedTextLength() > width && line.length > 1) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+      }
+    }
+  });
+}
+

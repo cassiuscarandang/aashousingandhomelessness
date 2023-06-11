@@ -9,15 +9,25 @@ body{
 header{
     display: grid;
     grid-area: header;
-    grid-template-areas: "heading" "navbar";
+    grid-template-areas: "heading";
 }
 
 #heading{
     display: grid;
     grid-area: heading;
-    grid-template-columns: .25fr 1fr .25fr;
-    grid-template-areas: "logo title surveyButton";
+    grid-template-columns: .30fr 1fr .30fr;
+    grid-template-areas: "logo title navbar";
+}
 
+#placeforlinks{
+    text-align: center;
+    padding-top: 8%;
+}
+
+#navbar{
+    display: grid;
+    grid-template-areas: "homeButton aboutButton surveyButton";
+    padding-top: 3%;
 }
 
 #title{
@@ -50,6 +60,7 @@ header{
     grid-area: panel;
     grid-template-rows: .2fr 3fr; 
     grid-template-areas: "title2" "buttonHome";
+    margin-left: 40px;
 }
 
 #survmap{
@@ -99,20 +110,80 @@ header{
 }
 
 /* css for the button */
-#surveyButton{
-    padding: 15px 32px;
-    margin: 10px;
-    background-color: #4CAF50;
-    cursor: pointer;
-}
+#surveyButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 18vh;
+    height: 4vh;
+    font-size: 10pt;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  
+  #surveyButton:hover {
+    background-color: #23527c;
+  }
 
-/* css for button to get rid of the underline */
-#surveyButton a{
-    text-decoration: none; 
-}
+  #homeButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 8vh;
+    height: 4vh
+  }
+
+  #aboutButton {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 8vh;
+    height: 4vh;
+    margin-left: 10%;
+  }
+  
+  #surveyButton:hover {
+    background-color: #23527c;
+  }
 
 #placeForButtons{
     grid-area: buttonHome;
     display:grid;
     grid-template-columns: repeat(1, 1fr);
+}
+
+#survdata{
+    border:1px solid black;
+    padding: 10px;
+}
+#survdata h2{
+    font-size: 12pt;
+}
+
+button2{
+    font-family: 'Inter', sans-serif;
+    background-color: #c2c2c2;
+    border-radius: 12px;
+    border-width: 0;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    list-style: none;
+    margin: 8px;
+    padding: 10px 12px;
+    text-align: center;
+    vertical-align: baseline;
 }
