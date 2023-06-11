@@ -97,21 +97,6 @@ function addMarker(data){
     return data
 }
 
-function createButtons2(title,link) {
-  const newButton = document.createElement("button2"); // adds a new button
-  newButton.id = "button2" + title; // gives the button a unique id
-  newButton.innerHTML = title; // gives the button a title
-  newButton.addEventListener('click', function() {
-      window.location.href = link; // redirects to the specified link
-  });
-  const spaceForButtons = document.getElementById('placeforlinks');
-  spaceForButtons.appendChild(newButton); // this adds the button to our page.
-}
-
-createButtons2('Home', 'index.html')
-createButtons2('About', 'about.html')
-createButtons2('📝Take the survey', 'https://docs.google.com/forms/d/e/1FAIpQLSdGrrsNrr9J_-RFIV31-eeoifLHyiB021avZqhm97z7wIM-Dw/viewform')
-
 function createButtons(lat,lng,title,zoom){
     const newButton = document.createElement("button"); // adds a new button
     newButton.id = "button"+title; // gives the button a unique id
