@@ -109,14 +109,18 @@ button{
 #panel{
     display:grid;
     grid-area: panel;
-    grid-template-rows: .2fr 3fr; 
-    grid-template-areas: "title2" "survdata";
+    grid-template-rows: 1fr; 
+    grid-template-areas:"survdata";
     margin-left: 40px;
 }
 
 #survdata{
     border:1px solid black;
     padding: 10px;
+}
+
+#survdata p{
+    text-align: center;
 }
 
 #survdata h2{
@@ -133,13 +137,6 @@ button{
     grid-template-columns: 1fr 1fr;
 }
 
-#overviewstats{
-    display: grid;
-    grid-area: stats;
-    grid-template-rows: .1fr 1fr;
-    grid-template-areas: "title3" "charts";
-}
-
 #title3{
     text-align: center
 }
@@ -147,8 +144,8 @@ button{
 #charts{
     display: grid;
     grid-area: charts;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: "chart1 chart2 chart3";
+    grid-template-rows: .9fr 1fr;
+    grid-template-areas: "chart1" "chart2" "chart3";
 }
 
 #chart1{

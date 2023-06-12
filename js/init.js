@@ -161,7 +161,7 @@ value: counts[key]
 
     console.log(data2)
     console.log(data3)
-    piechart(data2, 450, 450, 40)
+    piechart(data2, 150, 150, 10)
     barplot(data3)
     results.data.forEach(data => {
         console.log(data)
@@ -254,7 +254,7 @@ function piechart(data, width, height, margin) {
 function barplot(data) {
   var margin = { top: 30, right: 30, bottom: 60, left: 30 },
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 300 - margin.top - margin.bottom;
 
   // Determine the highest value in the data
   var maxValue = d3.max(data, function (d) {
