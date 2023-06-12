@@ -41,6 +41,7 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 
 Esri_WorldGrayCanvas.addTo(map);
 
+
 function addMarker(data){
   function mouseoverHandler(event) {
     const markerDataPanel = document.getElementById('survdata');
@@ -56,24 +57,25 @@ function addMarker(data){
   let surveydataproperties =  {
     "location": data['Where do you currently live?'],
     "experiences": data['What are your experiences with housing insecurity and affordability at UCLA?'],
-    "difficulties": data['Please share any difficulties you’ve had searching for off-campus housing, if any.'],
-    "studentlife": data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?'],
+    "difficulties": data['Please share difficulties you’ve had searching for off-campus housing, if any.'],
+    "studentlife": data['Does housing insecurity or unaffordability affect your day-to-day student life? If so, how?'],
     "resources": data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.'],
   }
 
   let markerobj = Object.assign(circleOptions, surveydataproperties)
 
-   let survresponses = `<h3>What is your current living situation?</h3>
-                <p>${data['Where do you currently live?']}</p> 
+  let survresponses = `<h3>What is your current living situation?</h3>
+                <p>${surveydataproperties.location}</p> 
                 <h3>What are your experiences with housing insecurity and affordability at UCLA?</h3>
-                <p>${data['What are your experiences with housing insecurity and affordability at UCLA?']}</p>
-                <h3>Please share any difficulties you’ve had searching for off-campus housing, if any.</h3>
-                <p>${data['Please share any difficulties you’ve had searching for off-campus housing, if any.']}</p>
+                <p>${surveydataproperties.experiences}</p>
+                <h3>Please share difficulties you’ve had searching for off-campus housing, if any.</h3>
+                <p>${surveydataproperties.difficulties}</p>
                 <h3>Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?</h3>
-                <p>${data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?']}</p>
+                <p>${surveydataproperties.studentlife}</p>
                 <h3>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h3>
-                <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
-    if (data['Where do you currently live?'] == "On-Campus Housing (Dorms)") {
+                <p>${surveydataproperties.resources}</p>`;
+
+if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
   circleOptions.fillColor = "red";
   oncampus.addLayer(
     L.circleMarker([data.lat, data.lng], markerobj)
@@ -81,9 +83,10 @@ function addMarker(data){
       .on('mouseover', mouseoverHandler)
       .on('mouseout', mouseoutHandler)
   );
-  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], oncampus, 'divOnCampusStudents');
+
+  createButtons(data.lat, data.lng, surveydataproperties.experiences, oncampus, 'divOnCampusHousingStudents');
 }
-    else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
+    else if(surveydataproperties.location == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
         offcampus.addLayer(
         L.circleMarker([data.lat,data.lng],markerobj)
@@ -93,7 +96,7 @@ function addMarker(data){
   );
   createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampus, 'divOffCampusHousingStudents');
 }
-    else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
+    else if(surveydataproperties.location == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
         offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
@@ -102,7 +105,7 @@ function addMarker(data){
   );
   createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampusgrad, 'divOffCampusGraduateHousingStudents');
 }
-    else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
+    else if(surveydataproperties.location == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
         commuter.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
@@ -111,7 +114,7 @@ function addMarker(data){
   );
   createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], commuter, 'divCommuterStudents');
 }
-    else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
+    else if(surveydataproperties.location == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
         unhoused.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
@@ -120,18 +123,19 @@ function addMarker(data){
   );
   createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], unhoused, 'divUnhousedStudents');
 }
-    else{
-        circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);         
-      }
+else {
+  circleOptions.fillColor = "black"
+  other.addLayer(L.circleMarker([data.lat, data.lng], markerobj)
+    .on('mouseover', mouseoverHandler)
+    .on('mouseout', mouseoutHandler));
+}
     return data
 }
 
 function liveButtons(lat, lng, title, zoom, featureGroup) {
   const newButton = document.createElement("button"); // adds a new button
-  newButton.id = "button" + title; // gives the button a unique id
+  newButton.id = "button" + title.replace(/\s/g, ''); // gives the button a unique id
+  console.log(newButton.id);
   newButton.innerHTML = title; // gives the button a title
   newButton.addEventListener('click', function () {
     const panelDiv = document.getElementById('panel');
@@ -165,7 +169,7 @@ function liveButtons(lat, lng, title, zoom, featureGroup) {
   spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
 
-liveButtons(34.07022254726645, -118.44680044184324, "On Campus Students", 15, oncampus);
+liveButtons(34.07022254726645, -118.44680044184324, "On Campus Housing Students", 15, oncampus);
 liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Housing Students", 14, offcampus);
 liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Graduate Housing Students", 14, offcampusgrad);
 liveButtons(34.02420334343204, -118.27631488157236, "Commuter Students", 10, commuter);
@@ -179,11 +183,11 @@ function createButtons(lat, lng, title, group, dividee) {
   newButton2.setAttribute("lat", lat);
   newButton2.setAttribute("lng", lng);
   newButton2.addEventListener('click', function () {
-    const markers = group.getLayers(); // Get all the markers in the oncampus feature group
+    let markers = group.getLayers(); // Get all the markers in the oncampus feature group
+    console.log(markers)
     markers.forEach(marker => {
       if (marker.getLatLng().lat === parseFloat(lat) && marker.getLatLng().lng === parseFloat(lng)) {
         marker.openPopup(); // Open the popup for the corresponding marker
-        map.flyTo([lat - (-.01), lng]); // Fly to the marker's location
       }
     });
   });
@@ -221,12 +225,13 @@ function processData(results) {
       value: counts[key]
   }));
   console.log(data3);
-  barplot(data3);
 
   filteredData.forEach(data => {
       console.log(data);
       addMarker(data);
   });
+
+  barplot(data3)
     oncampus.addTo(map) // add our layers after markers have been made
     offcampus.addTo(map) // add our layers after markers have been made  
     offcampusgrad.addTo(map) // add our layers after markers have been made
@@ -240,7 +245,7 @@ function processData(results) {
 loadData(dataUrl)
 
 
-// Bar Plot 
+// Bar Plot
 
 function barplot(data) {
   var margin = { top: 30, right: 30, bottom: 60, left: 30 },
@@ -264,11 +269,6 @@ function barplot(data) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // sort data
-  data.sort(function (b, a) {
-    return a.Value - b.Value;
-  });
-
   // X axis
   var x = d3
     .scaleBand()
@@ -291,23 +291,96 @@ function barplot(data) {
   svg.append("g").call(d3.axisLeft(y));
 
   // Bars
-  svg
-    .selectAll("mybar")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", function (d) {
-      return x(d.key);
-    })
-    .attr("y", function (d) {
-      return y(d.value);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", function (d) {
-      return height - y(d.value);
-    })
-    .attr("fill", "#69b3a2");
-}
+  var desiredOrder = ['On-Campus Housing (Dorms)', 'Off-Campus Housing (Living in Westwood)', 'Off-Campus Graduate Housing (Living in Westwood/Palms)', 'Off-Campus Commuter (Living outside Westwood)', 'Currently Unhoused/Homeless'];
+
+  // Reorder the data array based on the desired order
+  var reorderedData = data.sort(function (a, b) {
+    var indexA = desiredOrder.indexOf(a.key);
+    console.log(indexA)
+    var indexB = desiredOrder.indexOf(b.key);
+    return indexA - indexB;
+  });
+
+ // Bars
+ var bars = svg
+ .selectAll("mybar")
+ .data(data, function(d) {
+   return d.key; // Use the 'key' property as the data identifier
+ })
+ .enter()
+ .append("rect")
+ .attr("x", function (d) {
+   return x(d.key);
+ })
+ .attr("y", function (d) {
+   return y(d.value);
+ })
+ .attr("width", x.bandwidth())
+ .attr("height", function (d) {
+   return height - y(d.value);
+ })
+ .attr("fill", function (d) {
+   // Set color based on the value in the data
+   if (d.key === 'On-Campus Housing (Dorms)') {
+     return "red";
+   } else if (d.key === 'Off-Campus Housing (Living in Westwood)') {
+     return "blue";
+   } else if (d.key === 'Off-Campus Graduate Housing (Living in Westwood/Palms)') {
+     return "yellow";
+   } else if (d.key === 'Off-Campus Commuter (Living outside Westwood)') {
+     return "green";
+   } else if (d.key === 'Currently Unhoused/Homeless') {
+     return "purple";
+   } else {
+     return "black";
+   }
+ })
+ .attr("stroke", "black") // Add black outline
+ .attr("stroke-width", 1); // Adjust the thickness as desired
+
+// Event listener for click
+bars.on("click", function (d) {
+  if (d.key === "On-Campus Housing (Dorms)") {
+    const buttonId = '#buttonOnCampusHousingStudents';
+    const button = document.querySelector(buttonId);
+    console.log(button);
+    if (button) {
+      button.click(); // Trigger click event on the button
+    }
+  } else if (d.key === 'Off-Campus Housing (Living in Westwood)') {
+    const buttonId = '#buttonOffCampusHousingStudents';
+    const button = document.querySelector(buttonId);
+    console.log(button);
+    if (button) {
+      button.click(); // Trigger click event on the button
+    }
+  } else if (d.key === 'Off-Campus Graduate Housing (Living in Westwood/Palms)') {
+    const buttonId = '#buttonOffCampusGraduateHousingStudents';
+    const button = document.querySelector(buttonId);
+    console.log(button);
+    if (button) {
+      button.click(); // Trigger click event on the button
+    }
+  }
+    else if (d.key === 'Off-Campus Commuter (Living outside Westwood)') {
+    const buttonId = '#buttonCommuterStudents';
+    const button = document.querySelector(buttonId);
+    console.log(button);
+    if (button) {
+      button.click(); // Trigger click event on the button
+    }
+  }
+    else if (d.key === 'Currently Unhoused/Homeless') {
+    const buttonId = '#buttonUnhousedStudents';
+    const button = document.querySelector(buttonId);
+    console.log(button);
+    if (button) {
+      button.click(); // Trigger click event on the button
+    }
+  }
+  // Access the data associated with the clicked bar (d)
+  console.log("Clicked bar:", d.key);
+});
 
 // Helper function to wrap text within a specified width
 function wrapText(text, width) {
@@ -334,4 +407,4 @@ function wrapText(text, width) {
       }
     }
   });
-}
+}}
