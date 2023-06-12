@@ -16,6 +16,7 @@ p{
     font-size: 23px;
     margin-left: 60px;
     margin-right: 60px;
+    font-weight: lighter;
 }
 
 header{
@@ -170,4 +171,27 @@ button{
 
 #footer{
     grid-area: footer;
+}
+#ERCTButton{
+    text-align: center;
+}
+
+#BruinShelterButton{
+    text-align: center;
+}
+
+#UCLAEmergencyHousingButton{
+    text-align: center;
+}
+
+#BasicNeedsResourceutton{
+    text-align: center;
+}
+
+#CoOpsResourceutton{
+    text-align: center;
+}
+
+#SNAPButton{
+    text-align: center;
 }
