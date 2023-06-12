@@ -77,6 +77,11 @@ header{
     text-align: center;
 }
 
+.content-div {
+    display: none;
+  }
+
+
 #surveyButton {
     display: grid;
     padding: 10px 16px;
@@ -142,7 +147,7 @@ button{
 #placeForButtons{
     grid-area: buttonHome;
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
 #title3{
@@ -152,7 +157,7 @@ button{
 #charts{
     display: grid;
     grid-area: charts;
-    grid-template-rows: .9fr 1fr;
+    grid-template-rows: 1fr;
     grid-template-areas: "chart1" "chart2" "chart3";
 }
 
