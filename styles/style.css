@@ -6,6 +6,18 @@ body{
     gap: 10px;
 }
 
+h2{
+    font-size: 28px;
+    color: #92bfec;
+    text-align: center;
+}
+
+p{
+    font-size: 23px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
 header{
     display: grid;
     grid-area: header;
