@@ -41,13 +41,16 @@ let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/r
 
 Esri_WorldGrayCanvas.addTo(map);
 
-
-
 function addMarker(data){
-  function eventhandler(event) {
-    // Handle mouseover event
+  function mouseoverHandler(event) {
     const markerDataPanel = document.getElementById('survdata');
     markerDataPanel.innerHTML = survresponses;
+  }
+  const markerDataPanel = document.getElementById('survdata');
+  const originalContent = markerDataPanel.innerHTML;
+
+  function mouseoutHandler(event) {
+    markerDataPanel.innerHTML = originalContent;
   }
    let survresponses = `<h2>What is your current living situation?</h2>
                 <p>${data['Where do you currently live?']}</p> 
@@ -61,27 +64,39 @@ function addMarker(data){
                 <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
     if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
         circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
+        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);        
   }
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
-      }
+        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);        
+  }
     else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);        
       }
     else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);         
       }
     else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);         
       }
     else{
         circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions).on('mouseover', eventhandler));        
+        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        .on('mouseover', mouseoverHandler))
+        .on('mouseout', mouseoutHandler);         
       }
     return data
 }
@@ -99,8 +114,8 @@ function createButtons(lat,lng,title,zoom){
     spaceForButtons.appendChild(newButton);//this adds the button to our page.
 }
 
-createButtons(34.06692604858565, -118.44572041334482, 'Westwood', 15)
-createButtons(34.62264058741811, -117.03878205478009,'Beyond Westwood',8)
+createButtons(34.06692604858565, -118.44572041334482, 'Students in Westwood', 15)
+createButtons(34.62264058741811, -117.03878205478009,'Commuter Students',8)
 
 function loadData(url){
     Papa.parse(url, {

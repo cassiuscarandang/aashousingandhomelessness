@@ -39,7 +39,7 @@ header{
 }
 
 #homeButton {
-    display: inline-block;
+    display: grid;
     padding: 10px 16px;
     background-color: #c8cacd;
     color: #fff;
@@ -47,11 +47,12 @@ header{
     font-weight: bold;
     border-radius: 5px;
     width: 8vh;
-    height: 4vh
+    height: 4vh;
+    text-align: center;
 }
 
 #aboutButton {
-    display: inline-block;
+    display: grid;
     padding: 10px 16px;
     background-color: #c8cacd;
     color: #fff;
@@ -61,10 +62,11 @@ header{
     width: 8vh;
     height: 4vh;
     margin-left: 10%;
+    text-align: center;
 }
 
 #surveyButton {
-    display: inline-block;
+    display: grid;
     padding: 10px 16px;
     background-color: #c8cacd;
     color: #fff;
@@ -73,9 +75,10 @@ header{
     border-radius: 5px;
     width: 18vh;
     height: 4vh;
-    font-size: 10pt;
+    font-size: 12pt;
     margin-left: 10%;
     margin-right: 10%;
+    text-align: center;
 }
 
 .main{
