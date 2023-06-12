@@ -1,4 +1,6 @@
 // declare variables
+const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHDPfOGu2VPqApARI9h-tgQrhFjxyrs83mz5dpl3UE_tb8qhotj47wU17Hnch5D66MeejMCfaC3_VK/pub?output=csv"
+
 let mapOptions = {'center': [34.02420334343204, -118.27631488157236],'zoom':10}
 
 let oncampus = L.featureGroup();
@@ -14,7 +16,6 @@ let layers = {
     "Off Campus Graduate Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='yellow' /></svg>": offcampusgrad,
     "Off Campus Commuter Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='green' /></svg>": commuter,
     "Homeless/Unhoused Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='purple' /></svg>": unhoused,
-    "Other <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='black' /></svg>": other
 }
 
 let circleOptions = {
@@ -26,7 +27,6 @@ let circleOptions = {
     fillOpacity: 0.8
 }
 
-const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHDPfOGu2VPqApARI9h-tgQrhFjxyrs83mz5dpl3UE_tb8qhotj47wU17Hnch5D66MeejMCfaC3_VK/pub?output=csv"
 
 // define the leaflet map
 const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
@@ -52,70 +52,148 @@ function addMarker(data){
   function mouseoutHandler(event) {
     markerDataPanel.innerHTML = originalContent;
   }
-   let survresponses = `<h2>What is your current living situation?</h2>
-                <p>${data['Where do you currently live?']}</p> 
-                <h2>What are your experiences with housing insecurity and affordability at UCLA?</h2>
-                <p>${data['What are your experiences with housing insecurity and affordability at UCLA?']}</p>
-                <h2>Please share any difficulties you’ve had searching for off-campus housing, if any.</h2>
-                <p>${data['Please share any difficulties you’ve had searching for off-campus housing, if any.']}</p>
-                <h2>Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?</h2>
-                <p>${data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?']}</p>
-                <h2>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h2>
-                <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
-    if(data['Where do you currently live?'] == "On-Campus Housing (Dorms)"){
-        circleOptions.fillColor = "red"
-        oncampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);        
+
+  let surveydataproperties =  {
+    "location": data['Where do you currently live?'],
+    "experiences": data['What are your experiences with housing insecurity and affordability at UCLA?'],
+    "difficulties": data['Please share any difficulties you’ve had searching for off-campus housing, if any.'],
+    "studentlife": data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?'],
+    "resources": data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.'],
   }
+
+  let markerobj = Object.assign(circleOptions, surveydataproperties)
+
+   let survresponses = `<h3>What is your current living situation?</h3>
+                <p>${data['Where do you currently live?']}</p> 
+                <h3>What are your experiences with housing insecurity and affordability at UCLA?</h3>
+                <p>${data['What are your experiences with housing insecurity and affordability at UCLA?']}</p>
+                <h3>Please share any difficulties you’ve had searching for off-campus housing, if any.</h3>
+                <p>${data['Please share any difficulties you’ve had searching for off-campus housing, if any.']}</p>
+                <h3>Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?</h3>
+                <p>${data['Does housing insecurity/expensive housing affect your day-to-day student life? If so, how?']}</p>
+                <h3>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h3>
+                <p>${data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']}</p>`
+    if (data['Where do you currently live?'] == "On-Campus Housing (Dorms)") {
+  circleOptions.fillColor = "red";
+  oncampus.addLayer(
+    L.circleMarker([data.lat, data.lng], markerobj)
+      .bindPopup(survresponses)
+      .on('mouseover', mouseoverHandler)
+      .on('mouseout', mouseoutHandler)
+  );
+  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], oncampus, 'divOnCampusStudents');
+}
     else if(data['Where do you currently live?'] == "Off-Campus Housing (Living in Westwood)"){
         circleOptions.fillColor = "blue"
-        offcampus.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);        
-  }
+        offcampus.addLayer(
+        L.circleMarker([data.lat,data.lng],markerobj)
+          .bindPopup(survresponses)
+          .on('mouseover', mouseoverHandler)
+          .on('mouseout', mouseoutHandler)
+  );
+  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampus, 'divOffCampusHousingStudents');
+}
     else if(data['Where do you currently live?'] == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);        
-      }
+        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
+        .bindPopup(survresponses)
+        .on('mouseover', mouseoverHandler)
+        .on('mouseout', mouseoutHandler)
+  );
+  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampusgrad, 'divOffCampusGraduateHousingStudents');
+}
     else if(data['Where do you currently live?'] == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);         
-      }
+        commuter.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
+        .bindPopup(survresponses)
+        .on('mouseover', mouseoverHandler)
+        .on('mouseout', mouseoutHandler)
+  );
+  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], commuter, 'divCommuterStudents');
+}
     else if(data['Where do you currently live?'] == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
-        .on('mouseover', mouseoverHandler))
-        .on('mouseout', mouseoutHandler);         
-      }
+        unhoused.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
+        .bindPopup(survresponses)
+        .on('mouseover', mouseoverHandler)
+        .on('mouseout', mouseoutHandler)
+  );
+  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], unhoused, 'divUnhousedStudents');
+}
     else{
         circleOptions.fillColor = "black"
-        other.addLayer(L.circleMarker([data.lat,data.lng],circleOptions)
+        other.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .on('mouseover', mouseoverHandler))
         .on('mouseout', mouseoutHandler);         
       }
     return data
 }
 
-function createButtons(lat,lng,title,zoom){
-    const newButton = document.createElement("button"); // adds a new button
-    newButton.id = "button"+title; // gives the button a unique id
-    newButton.innerHTML = title; // gives the button a title
-    newButton.setAttribute("lat",lat); // sets the latitude 
-    newButton.setAttribute("lng",lng); // sets the longitude 
-    newButton.addEventListener('click', function(){
-        map.flyTo([lat,lng],zoom); //this is the flyTo from Leaflet
-    })
-    const spaceForButtons = document.getElementById('placeForButtons')
-    spaceForButtons.appendChild(newButton);//this adds the button to our page.
+function liveButtons(lat, lng, title, zoom, featureGroup) {
+  const newButton = document.createElement("button"); // adds a new button
+  newButton.id = "button" + title; // gives the button a unique id
+  newButton.innerHTML = title; // gives the button a title
+  newButton.addEventListener('click', function () {
+    const panelDiv = document.getElementById('panel');
+    panelDiv.style.display = 'none';
+
+    map.flyTo([lat, lng], zoom); // this is the flyTo from Leaflet
+
+    // Show the corresponding div and hide the others
+    const contentDivs = document.getElementsByClassName('content-div');
+    for (const div of contentDivs) {
+      if (div.id === "div" + title.replace(/\s/g, '')) {
+        div.style.display = 'block';
+      } else {
+        div.style.display = 'none';
+      }
+    }
+
+    // Show the specified feature group and hide the others
+    for (const layer in layers) {
+      if (layers.hasOwnProperty(layer)) {
+        if (layers[layer] === featureGroup) {
+          map.addLayer(featureGroup);
+        } else {
+          map.removeLayer(layers[layer]);
+        }
+      }
+    }
+  });
+
+  const spaceForButtons = document.getElementById('placeForButtons');
+  spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
 
-createButtons(34.06692604858565, -118.44572041334482, 'Students in Westwood', 15)
-createButtons(34.62264058741811, -117.03878205478009,'Commuter Students',8)
+liveButtons(34.07022254726645, -118.44680044184324, "On Campus Students", 15, oncampus);
+liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Housing Students", 14, offcampus);
+liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Graduate Housing Students", 14, offcampusgrad);
+liveButtons(34.02420334343204, -118.27631488157236, "Commuter Students", 10, commuter);
+liveButtons(34.02420334343204, -118.27631488157236, "Unhoused Students", 10, unhoused);
+
+
+function createButtons(lat, lng, title, group, dividee) {
+  const newButton2 = document.createElement("button");
+  newButton2.id = "button" + title;
+  newButton2.innerHTML = title;
+  newButton2.setAttribute("lat", lat);
+  newButton2.setAttribute("lng", lng);
+  newButton2.addEventListener('click', function () {
+    const markers = group.getLayers(); // Get all the markers in the oncampus feature group
+    markers.forEach(marker => {
+      if (marker.getLatLng().lat === parseFloat(lat) && marker.getLatLng().lng === parseFloat(lng)) {
+        marker.openPopup(); // Open the popup for the corresponding marker
+        map.flyTo([lat - (-.01), lng]); // Fly to the marker's location
+      }
+    });
+  });
+  const ForButtons = document.getElementById(dividee);
+  ForButtons.appendChild(newButton2);
+}
+
+
+
+// Add buttons for other feature groups as needed  
 
 function loadData(url){
     Papa.parse(url, {
@@ -125,48 +203,30 @@ function loadData(url){
     })
 }
 
-function processData(results){
-    console.log(results);
-    var pieData = results.data.map(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?']); // Replace 'columnName' with the actual column name
-    var barData = results.data.map(data => data['Where do you currently live?']); // Replace 'columnName' with the actual column name
-    var wrd_rsp = results.data.map(data => data['Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.']);
-    var values = wrd_rsp.filter(response => response !== undefined);
-    const concatenatedValues = values.join(" ");
-    console.log(concatenatedValues)
-    var frequencies = {};
-      pieData.forEach(response => {
-          if (frequencies.hasOwnProperty(response)) {
-              frequencies[response]++;
-        } else {
-              frequencies[response] = 1;
-        }
-  });
-    var data2 = Object.keys(frequencies).map(key => ({
-    key: key,
-    value: frequencies[key]
-  }));
-
+function processData(results) {
+  console.log(results);
+  var filteredData = results.data.filter(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?'] !== 'No');
+  console.log(filteredData)
+  var barData = filteredData.map(data => data['Where do you currently live?']);
   var counts = {};
   barData.forEach(response => {
       if (counts.hasOwnProperty(response)) {
           counts[response]++;
-    } else {
+      } else {
           counts[response] = 1;
-    }
-});
-var data3 = Object.keys(counts).map(key => ({
-key: key,
-value: counts[key]
-}));
+      }
+  });
+  var data3 = Object.keys(counts).map(key => ({
+      key: key,
+      value: counts[key]
+  }));
+  console.log(data3);
+  barplot(data3);
 
-    console.log(data2)
-    console.log(data3)
-    piechart(data2, 150, 150, 10)
-    barplot(data3)
-    results.data.forEach(data => {
-        console.log(data)
-        addMarker(data)
-    })
+  filteredData.forEach(data => {
+      console.log(data);
+      addMarker(data);
+  });
     oncampus.addTo(map) // add our layers after markers have been made
     offcampus.addTo(map) // add our layers after markers have been made  
     offcampusgrad.addTo(map) // add our layers after markers have been made
@@ -179,77 +239,8 @@ value: counts[key]
 
 loadData(dataUrl)
 
-// Pie Chart - Chart 1
 
-function piechart(data, width, height, margin) {
-  var radius = Math.min(width, height) / 2 - margin;
-  var svg2 = d3.select("#chart1")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-  var color = d3.scaleOrdinal()
-    .domain(data.map(d => d.key))
-    .range(d3.schemeSet2);
-
-  var pie = d3.pie()
-    .value(function(d) { return d.value; });
-
-  var data_ready = pie(data);
-
-  var arcGenerator = d3.arc()
-    .innerRadius(0)
-    .outerRadius(radius);
-
-  var slices = svg2.selectAll('mySlices')
-    .data(data_ready)
-    .enter()
-    .append('path')
-    .attr('d', arcGenerator)
-    .attr('fill', function(d) { return color(d.data.key); })
-    .attr("stroke", "black")
-    .style("stroke-width", "2px")
-    .style("opacity", 0.7);
-
-  var labels = svg2.selectAll('mySlices')
-    .data(data_ready)
-    .enter()
-    .append('text')
-    .text(function(d) { return d.data.key; })
-    .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")"; })
-    .style("text-anchor", "middle")
-    .style("font-size", 17);
-
-    slices.on("pointerover", function(d) {
-      d3.select(this)
-        .style("opacity", 1.0);
-  
-      // Calculate percentage
-      var percentage = ((d.value / d3.sum(data, function(d) { return d.value; })) * 100).toFixed(0);
-  
-      // Show pop-up with label and percentage
-      d3.select("#chart1")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("left", (d3.event.pageX + 10) + "px")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .text(percentage + "%" + " of people answered " + d.data.key);
-    })
-    .on("pointerout", function(d) {
-      d3.select(this)
-        .style("opacity", 0.7);
-  
-      // Remove the pop-up
-      d3.select(".tooltip").remove();
-    })
-    .on("click", function(d) {
-      console.log("Clicked on group:", d.data.key);
-    });
-}
-
-// Bar Plot - Chart 2
+// Bar Plot 
 
 function barplot(data) {
   var margin = { top: 30, right: 30, bottom: 60, left: 30 },
@@ -344,4 +335,3 @@ function wrapText(text, width) {
     }
   });
 }
-
