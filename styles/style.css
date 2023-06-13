@@ -19,6 +19,8 @@ body{
     font-weight: lighter;
 }
 
+
+
 header{
     display: grid;
     grid-area: header;
@@ -101,6 +103,24 @@ header{
     text-align: center;
 }
 
+#secondsurveyButton {
+    display: grid;
+    padding: 10px 16px;
+    background-color: #c8cacd;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 18vh;
+    height: 6vh;
+    font-size: 12pt;
+    margin-left: 45%;
+    margin-right: 10%;
+    text-align: center;
+    justify-self: center;
+    align-self: center;
+}
+
 .main{
     grid-area: main_content;
     display: grid;
@@ -170,7 +190,7 @@ button{
 #placeForButtons{
     grid-area: buttonHome;
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: .5fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 #title3{

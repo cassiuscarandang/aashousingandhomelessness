@@ -34,8 +34,6 @@ let layers = {
     "Homeless/Unhoused Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='purple' /></svg>": unhoused,
 }
 
-L.control.layers(null,layers, {collapsed:false}).addTo(map)
-
 
 // Circle Options
 let circleOptions = {
@@ -49,16 +47,6 @@ let circleOptions = {
 
 // Add Marker Function that 1) Adds Markers 2) Allows User to Hover Over Markers and 3) Adds Information About the Markers to Summary Divs
 function addMarker(data){
-  function mouseoverHandler(event) {
-    const markerDataPanel = document.getElementById('survdata');
-    markerDataPanel.innerHTML = survresponses;
-  }
-  const markerDataPanel = document.getElementById('survdata');
-  const originalContent = markerDataPanel.innerHTML;
-
-  function mouseoutHandler(event) {
-    markerDataPanel.innerHTML = originalContent;
-  }
 
   let surveydataproperties =  {
     "location": data['Where do you currently live?'],
@@ -86,8 +74,6 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
   oncampus.addLayer(
     L.circleMarker([data.lat, data.lng], markerobj)
       .bindPopup(survresponses)
-      .on('mouseover', mouseoverHandler)
-      .on('mouseout', mouseoutHandler)
   );
 
   createButtons(data.lat, data.lng, surveydataproperties.experiences, oncampus, 'divOnCampusHousingStudents');
@@ -97,8 +83,6 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         offcampus.addLayer(
         L.circleMarker([data.lat,data.lng],markerobj)
           .bindPopup(survresponses)
-          .on('mouseover', mouseoverHandler)
-          .on('mouseout', mouseoutHandler)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampus, 'divOffCampusHousingStudents');
 }
@@ -106,8 +90,6 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         circleOptions.fillColor = "yellow"
         offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
-        .on('mouseover', mouseoverHandler)
-        .on('mouseout', mouseoutHandler)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampusgrad, 'divOffCampusGraduateHousingStudents');
 }
@@ -115,8 +97,6 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         circleOptions.fillColor = "green"
         commuter.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
-        .on('mouseover', mouseoverHandler)
-        .on('mouseout', mouseoutHandler)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, commuter, 'divCommuterStudents');
 }
@@ -124,18 +104,26 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         circleOptions.fillColor = "purple"
         unhoused.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
         .bindPopup(survresponses)
-        .on('mouseover', mouseoverHandler)
-        .on('mouseout', mouseoutHandler)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, unhoused, 'divUnhousedStudents');
 }
 else {
   circleOptions.fillColor = "black"
-  other.addLayer(L.circleMarker([data.lat, data.lng], markerobj)
-    .on('mouseover', mouseoverHandler)
-    .on('mouseout', mouseoutHandler));
+  other.addLayer(L.circleMarker([data.lat, data.lng], markerobj));
 }
     return data
+}
+
+function resetButton(title) {
+  const newButton = document.createElement("button"); // adds a new button
+  newButton.id = "button" + title.replace(/\s/g, ''); // gives the button a unique id
+  console.log(newButton.id);
+  newButton.innerHTML = title; // gives the button a title
+  newButton.addEventListener('click', function () {
+    location.reload();
+  });
+  const spaceForButtons = document.getElementById('placeForButtons');
+  spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
 
 function liveButtons(lat, lng, title, zoom, featureGroup) {
@@ -175,6 +163,7 @@ function liveButtons(lat, lng, title, zoom, featureGroup) {
   spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
 
+resetButton('Reset Map')
 liveButtons(34.07022254726645, -118.44680044184324, "On Campus Housing Students", 15, oncampus);
 liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Housing Students", 14, offcampus);
 liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Graduate Housing Students", 14, offcampusgrad);
