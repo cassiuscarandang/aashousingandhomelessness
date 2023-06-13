@@ -80,6 +80,7 @@ header{
 .content-div {
     display: none;
     text-align: center;
+    border:1px solid black;
   }
 
 
