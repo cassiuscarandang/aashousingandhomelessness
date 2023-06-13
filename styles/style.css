@@ -161,6 +161,10 @@ button{
     background-color: rgb(188, 37, 188);
 }
 
+.inactive-button {
+    opacity: 0.5;
+  }
+
 #the_map{
     height:80vh;
     grid-area: main_map;

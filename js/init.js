@@ -157,11 +157,25 @@ function liveButtons(lat, lng, title, zoom, featureGroup) {
         }
       }
     }
+
+    // Remove the inactive-button class from all buttons
+    const buttons = document.getElementsByTagName("button");
+    for (const button of buttons) {
+      button.classList.remove("inactive-button");
+    }
+
+    // Gray out the inactive buttons
+    for (const button of buttons) {
+      if (button !== newButton && !button.classList.contains("exclude-from-gray")
+    ) {button.classList.add("inactive-button");
+      }
+    }
   });
 
   const spaceForButtons = document.getElementById('placeForButtons');
   spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
+
 
 resetButton('Reset Map')
 liveButtons(34.07022254726645, -118.44680044184324, "On Campus Housing Students", 15, oncampus);
@@ -177,6 +191,7 @@ function createButtons(lat, lng, title, group, dividee) {
   newButton2.innerHTML = title;
   newButton2.setAttribute("lat", lat);
   newButton2.setAttribute("lng", lng);
+  newButton2.classList.add("exclude-from-gray");
   newButton2.addEventListener('click', function () {
     let markers = group.getLayers(); // Get all the markers in the oncampus feature group
     console.log(markers)
