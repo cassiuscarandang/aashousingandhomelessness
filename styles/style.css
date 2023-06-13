@@ -6,13 +6,13 @@ body{
     gap: 10px;
 }
 
-h2{
+#About h2{
     font-size: 28px;
     color: #92bfec;
     text-align: center;
 }
 
-p{
+#About p{
     font-size: 23px;
     margin-left: 60px;
     margin-right: 60px;
@@ -80,6 +80,8 @@ header{
 
 .content-div {
     display: none;
+    text-align: center;
+    border:1px solid black;
   }
 
 
@@ -129,7 +131,7 @@ button{
     grid-area: panel;
     grid-template-rows: 1fr; 
     grid-template-areas:"survdata";
-    margin-left: 40px;
+    margin-left: 10px;
 }
 
 #survdata{
@@ -160,6 +162,7 @@ button{
     grid-area: charts;
     grid-template-rows: 1fr;
     grid-template-areas: "chart1" "chart2" "chart3";
+    margin-top: 5%;
 }
 
 #chart1{
