@@ -205,6 +205,8 @@ function createButtons(lat, lng, title, group, dividee) {
   });
   const ForButtons = document.getElementById(dividee);
   ForButtons.appendChild(newButton2);
+  const paragraphElement = ForButtons.querySelector('p');
+  ForButtons.insertBefore(newButton2, paragraphElement.nextSibling);
 }
 
 // Function to parse our CSV Data
