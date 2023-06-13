@@ -121,6 +121,26 @@ button{
 
 }
 
+#buttonOnCampusHousingStudents{
+    background-color: rgba(255, 0, 0, 0.929);
+}
+
+#buttonOffCampusHousingStudents{
+    background-color: rgba(0, 110, 255, 0.717);
+}
+
+#buttonOffCampusGraduateHousingStudents{
+    background-color: yellow;
+}
+
+#buttonCommuterStudents{
+    background-color: green;
+}
+
+#buttonUnhousedStudents{
+    background-color: rgb(188, 37, 188);
+}
+
 #the_map{
     height:80vh;
     grid-area: main_map;
