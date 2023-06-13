@@ -33,7 +33,9 @@ For this project, we utilized Leaflet JS, Google Sheets, Google Forms, and a num
 - Links to student resources provided in the About tab
 
 ## Screenshots
-![Screen Shot 2023-06-13 at 2 15 11 AM](https://github.com/cassiuscarandang/aashousingandhomelessness/assets/111466957/7092d416-5200-4c4a-a9a9-8fc8caae721e)
+
+![ffrontpage](https://github.com/cassiuscarandang/aashousingandhomelessness/assets/111466957/ea20c859-fab0-4137-a9f2-899fae6e7b21)
+
 ![Screen Shot 2023-06-13 at 2 16 09 AM](https://github.com/cassiuscarandang/aashousingandhomelessness/assets/111466957/8ef88c0d-082a-4bc5-9c48-f04b65fd8015)
 
 ## Usage
