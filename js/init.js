@@ -7,8 +7,6 @@ let mapOptions = {'center': [34.02420334343204, -118.27631488157236],'zoom':10}
 // define the leaflet map
 const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
 
-// add layer control box
-
 // Bringing in and Adding our Basemap
 let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -45,7 +43,7 @@ let circleOptions = {
     fillOpacity: 0.8
 }
 
-// Add Marker Function that 1) Adds Markers 2) Allows User to Hover Over Markers and 3) Adds Information About the Markers to Summary Divs
+// Add Marker Function that Adds Markers and Adds Information About the Markers to Summary Divs
 function addMarker(data){
 
   let surveydataproperties =  {
@@ -58,7 +56,7 @@ function addMarker(data){
 
   let markerobj = Object.assign(circleOptions, surveydataproperties)
 
-  let survresponses = `<h3>What is your current living situation?</h3>
+  let surveyresponses = `<h3>What is your current living situation?</h3>
                 <p>${surveydataproperties.location}</p> 
                 <h3>What are your experiences with housing insecurity and affordability at UCLA?</h3>
                 <p>${surveydataproperties.experiences}</p>
@@ -69,63 +67,67 @@ function addMarker(data){
                 <h3>Please describe any resources that you have used to assist with housing difficulties and/or housing affordability.</h3>
                 <p>${surveydataproperties.resources}</p>`;
 
-if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
-  circleOptions.fillColor = "red";
-  oncampus.addLayer(
-    L.circleMarker([data.lat, data.lng], markerobj)
-      .bindPopup(survresponses)
-  );
-
+  if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
+    circleOptions.fillColor = "red";
+    oncampus.addLayer(
+      L.circleMarker([data.lat, data.lng], markerobj)
+        .bindPopup(surveyresponses)
+    );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, oncampus, 'divOnCampusHousingStudents');
 }
-    else if(surveydataproperties.location == "Off-Campus Housing (Living in Westwood)"){
-        circleOptions.fillColor = "blue"
-        offcampus.addLayer(
-        L.circleMarker([data.lat,data.lng],markerobj)
-          .bindPopup(survresponses)
+
+  else if(surveydataproperties.location == "Off-Campus Housing (Living in Westwood)"){
+    circleOptions.fillColor = "blue"
+    offcampus.addLayer(
+      L.circleMarker([data.lat,data.lng],markerobj)
+        .bindPopup(surveyresponses)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampus, 'divOffCampusHousingStudents');
 }
-    else if(surveydataproperties.location == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
-        circleOptions.fillColor = "yellow"
-        offcampusgrad.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
-        .bindPopup(survresponses)
+
+  else if(surveydataproperties.location == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
+    circleOptions.fillColor = "yellow"
+    offcampusgrad.addLayer(
+      L.circleMarker([data.lat,data.lng],markerobj)
+       .bindPopup(surveyresponses)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampusgrad, 'divOffCampusGraduateHousingStudents');
 }
-    else if(surveydataproperties.location == "Off-Campus Commuter (Living outside Westwood)"){
-        circleOptions.fillColor = "green"
-        commuter.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
-        .bindPopup(survresponses)
+
+  else if(surveydataproperties.location == "Off-Campus Commuter (Living outside Westwood)"){
+    circleOptions.fillColor = "green"
+    commuter.addLayer(
+      L.circleMarker([data.lat,data.lng],markerobj)
+      .bindPopup(surveyresponses)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, commuter, 'divCommuterStudents');
 }
-    else if(surveydataproperties.location == "Currently Unhoused/Homeless"){
-        circleOptions.fillColor = "purple"
-        unhoused.addLayer(L.circleMarker([data.lat,data.lng],markerobj)
-        .bindPopup(survresponses)
+
+  else if(surveydataproperties.location == "Currently Unhoused/Homeless"){
+    circleOptions.fillColor = "purple"
+    unhoused.addLayer(
+      L.circleMarker([data.lat,data.lng],markerobj)
+       .bindPopup(surveyresponses)
   );
   createButtons(data.lat, data.lng, surveydataproperties.experiences, unhoused, 'divUnhousedStudents');
-}
-else {
-  circleOptions.fillColor = "black"
-  other.addLayer(L.circleMarker([data.lat, data.lng], markerobj));
 }
     return data
 }
 
+// Function to create our reset button
 function resetButton(title) {
   const newButton = document.createElement("button"); // adds a new button
   newButton.id = "button" + title.replace(/\s/g, ''); // gives the button a unique id
   console.log(newButton.id);
   newButton.innerHTML = title; // gives the button a title
   newButton.addEventListener('click', function () {
-    location.reload();
+    location.reload(); // reloads the webpage to reset the map
   });
   const spaceForButtons = document.getElementById('placeForButtons');
-  spaceForButtons.appendChild(newButton); // this adds the button to our page.
+  spaceForButtons.appendChild(newButton); // this adds the button to our buttonbar.
 }
 
+// Function to create our buttons by housing situation
 function liveButtons(lat, lng, title, zoom, featureGroup) {
   const newButton = document.createElement("button"); // adds a new button
   newButton.id = "button" + title.replace(/\s/g, ''); // gives the button a unique id
@@ -133,8 +135,7 @@ function liveButtons(lat, lng, title, zoom, featureGroup) {
   newButton.innerHTML = title; // gives the button a title
   newButton.addEventListener('click', function () {
     const panelDiv = document.getElementById('panel');
-    panelDiv.style.display = 'none';
-
+    panelDiv.style.display = 'none'; // hide the initial introductory panel
     map.flyTo([lat, lng], zoom); // this is the flyTo from Leaflet
 
     // Show the corresponding div and hide the others
@@ -176,6 +177,7 @@ function liveButtons(lat, lng, title, zoom, featureGroup) {
   spaceForButtons.appendChild(newButton); // this adds the button to our page.
 }
 
+// Creating our button bar buttons
 
 resetButton('Reset Map')
 liveButtons(34.07022254726645, -118.44680044184324, "On Campus Housing Students", 15, oncampus);
@@ -184,7 +186,7 @@ liveButtons(34.07022254726645, -118.44680044184324, "Off Campus Graduate Housing
 liveButtons(34.02420334343204, -118.27631488157236, "Commuter Students", 10, commuter);
 liveButtons(34.02420334343204, -118.27631488157236, "Unhoused Students", 10, unhoused);
 
-
+// This createButtons function creates buttons on the users' responses
 function createButtons(lat, lng, title, group, dividee) {
   const newButton2 = document.createElement("button");
   newButton2.id = "button" + title;
@@ -205,6 +207,7 @@ function createButtons(lat, lng, title, group, dividee) {
   ForButtons.appendChild(newButton2);
 }
 
+// Function to parse our CSV Data
 function loadData(url){
     Papa.parse(url, {
         header: true,
@@ -213,11 +216,12 @@ function loadData(url){
     })
 }
 
+// Processing and filtering the results 
 function processData(results) {
   console.log(results);
-  var filteredData = results.data.filter(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?'] !== 'No');
-  var barData = filteredData.map(data => data['Where do you currently live?']);
-  var counts = {};
+  var filteredData = results.data.filter(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?'] !== 'No'); // Making sure we only get the UCLA housing insecure community
+  var barData = filteredData.map(data => data['Where do you currently live?']); // This is what our bar shart wil be about
+  var counts = {}; // Count the number of each response
   barData.forEach(response => {
       if (counts.hasOwnProperty(response)) {
           counts[response]++;
@@ -225,31 +229,34 @@ function processData(results) {
           counts[response] = 1;
       }
   });
+  // Create an object with the x variable and the count of each response
   var data3 = Object.keys(counts).map(key => ({
       key: key,
       value: counts[key]
   }));
   console.log(data3);
+  // The order we want our bar chart to be in
   const customSortOrder = ['On-Campus Housing (Dorms)', 'Off-Campus Housing (Living in Westwood)', 'Off-Campus Graduate Housing (Living in Westwood/Palms)', 'Off-Campus Commuter (Living outside Westwood)', 'Currently Unhoused/Homeless'];
-
+  
+  // This puts our data in the order above so it sorts the bar chart (code we got online)
   data3.sort((a, b) => {
   const indexA = customSortOrder.indexOf(a.key);
   const indexB = customSortOrder.indexOf(b.key);
 
   if (indexA < indexB) {
-    return -1; // a should be sorted before b
+    return -1; 
   } else if (indexA > indexB) {
-    return 1; // a should be sorted after b
+    return 1; 
   }
 
-  return 0; // a and b have the same sort order
+  return 0; 
 });
 
+// Add a marker for each relevant data point
   filteredData.forEach(data => {
       console.log(data);
       addMarker(data);
   });
-
     barplot(data3) // creates the bar chart of our data
     oncampus.addTo(map) // add our layers after markers have been made
     offcampus.addTo(map) // add our layers after markers have been made  
@@ -261,11 +268,11 @@ function processData(results) {
     map.fitBounds(allLayers.getBounds());
 }
 
+// Load in our CSV
 loadData(dataUrl)
 
 
 // Bar Plot
-
 function barplot(data) {
   var margin = { top: 30, right: 30, bottom: 60, left: 30 },
     width = 460 - margin.left - margin.right,
@@ -279,7 +286,7 @@ function barplot(data) {
   // Set the y-axis domain based on the highest value
   var y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
 
-  // append the svg object to the body of the page
+  // Appends the svg object to the body of the page
   var svg = d3
     .select("#chart2")
     .append("svg")
@@ -309,63 +316,54 @@ function barplot(data) {
   // Y axis
   svg.append("g").call(d3.axisLeft(y));
 
-  // Bars
-  var desiredOrder = ['On-Campus Housing (Dorms)', 'Off-Campus Housing (Living in Westwood)', 'Off-Campus Graduate Housing (Living in Westwood/Palms)', 'Off-Campus Commuter (Living outside Westwood)', 'Currently Unhoused/Homeless'];
-
-  // Reorder the data array based on the desired order
-  var reorderedData = data.sort(function (a, b) {
-    var indexA = desiredOrder.indexOf(a.key);
-    console.log(indexA)
-    var indexB = desiredOrder.indexOf(b.key);
-    return indexA - indexB;
-  });
-
- // Bars
+ // The Bars
  var bars = svg
- .selectAll("mybar")
- .data(data, function(d) {
-   return d.key; // Use the 'key' property as the data identifier
+    .selectAll("mybar")
+    .data(data, function(d) {
+    return d.key; // Use the 'key' property as the data identifier
  })
- .enter()
- .append("rect")
- .attr("x", function (d) {
-   return x(d.key);
+    .enter()
+    .append("rect")
+    .attr("x", function (d) {
+    return x(d.key);
  })
- .attr("y", function (d) {
-   return y(d.value);
+    .attr("y", function (d) {
+    return y(d.value);
  })
- .attr("width", x.bandwidth())
- .attr("height", function (d) {
-   return height - y(d.value);
+    .attr("width", x.bandwidth())
+    .attr("height", function (d) {
+    return height - y(d.value);
  })
- .attr("fill", function (d) {
+    .attr("fill", function (d) {
    // Set color based on the value in the data
-   if (d.key === 'On-Campus Housing (Dorms)') {
-     return "red";
+    if (d.key === 'On-Campus Housing (Dorms)') {
+        return "red";
    } else if (d.key === 'Off-Campus Housing (Living in Westwood)') {
-     return "blue";
+        return "blue";
    } else if (d.key === 'Off-Campus Graduate Housing (Living in Westwood/Palms)') {
-     return "yellow";
+        return "yellow";
    } else if (d.key === 'Off-Campus Commuter (Living outside Westwood)') {
-     return "green";
+        return "green";
    } else if (d.key === 'Currently Unhoused/Homeless') {
-     return "purple";
+        return "purple";
    } else {
-     return "black";
+        return "black";
    }
  })
- .attr("stroke", "black") // Add black outline
- .attr("stroke-width", 1); // Adjust the thickness as desired
+ .attr("stroke", "black") // Adding black outline
+ .attr("stroke-width", 1); // Adjusting the thickness
 
 // Event listener for click
 bars.on("click", function (d) {
+  // If I click on the bar that is On Campus, then press the corresponding button
   if (d.key === "On-Campus Housing (Dorms)") {
     const buttonId = '#buttonOnCampusHousingStudents';
     const button = document.querySelector(buttonId);
     console.log(button);
     if (button) {
-      button.click(); // Trigger click event on the button
+      button.click(); 
     }
+  // If I click on the bar that is Off Campus, then press the corresponding button
   } else if (d.key === 'Off-Campus Housing (Living in Westwood)') {
     const buttonId = '#buttonOffCampusHousingStudents';
     const button = document.querySelector(buttonId);
@@ -373,6 +371,7 @@ bars.on("click", function (d) {
     if (button) {
       button.click(); // Trigger click event on the button
     }
+  // If I click on the bar that is Off Campus Grad Student, then press the corresponding button
   } else if (d.key === 'Off-Campus Graduate Housing (Living in Westwood/Palms)') {
     const buttonId = '#buttonOffCampusGraduateHousingStudents';
     const button = document.querySelector(buttonId);
@@ -381,6 +380,7 @@ bars.on("click", function (d) {
       button.click(); // Trigger click event on the button
     }
   }
+  // If I click on the bar that is Commuter, then press the corresponding button
     else if (d.key === 'Off-Campus Commuter (Living outside Westwood)') {
     const buttonId = '#buttonCommuterStudents';
     const button = document.querySelector(buttonId);
@@ -389,6 +389,7 @@ bars.on("click", function (d) {
       button.click(); // Trigger click event on the button
     }
   }
+  // If I click on the bar that is Unhoused, then press the corresponding button
     else if (d.key === 'Currently Unhoused/Homeless') {
     const buttonId = '#buttonUnhousedStudents';
     const button = document.querySelector(buttonId);
@@ -397,7 +398,6 @@ bars.on("click", function (d) {
       button.click(); // Trigger click event on the button
     }
   }
-  // Access the data associated with the clicked bar (d)
   console.log("Clicked bar:", d.key);
 });
 
@@ -409,7 +409,7 @@ function wrapText(text, width) {
       word,
       line = [],
       lineNumber = 0,
-      lineHeight = 1.1, // Adjust as needed
+      lineHeight = 1.1,
       y = text.attr("y"),
       dy = parseFloat(text.attr("dy") || 0),
       tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");

@@ -125,7 +125,7 @@ header{
     grid-area: main_content;
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-areas: "buttonHome" "survmap" "stats";
+    grid-template-areas: "buttonHome" "surveymap" "stats";
 }
 
 button{
@@ -133,9 +133,9 @@ button{
     padding: 10px
 }
 
-#survmap{
+#surveymap{
     display:grid;
-    grid-area: survmap;
+    grid-area: surveymap;
     grid-template-columns: 1.25fr .75fr;
     grid-template-areas: "main_map panel";
 
