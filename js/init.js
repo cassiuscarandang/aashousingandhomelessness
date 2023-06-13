@@ -1,8 +1,23 @@
-// declare variables
+// Data from our Survey CSV
 const dataUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHDPfOGu2VPqApARI9h-tgQrhFjxyrs83mz5dpl3UE_tb8qhotj47wU17Hnch5D66MeejMCfaC3_VK/pub?output=csv"
 
+// Starting Map Options 
 let mapOptions = {'center': [34.02420334343204, -118.27631488157236],'zoom':10}
 
+// define the leaflet map
+const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
+
+// add layer control box
+
+// Bringing in and Adding our Basemap
+let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    maxZoom: 16
+});
+
+Esri_WorldGrayCanvas.addTo(map);
+
+// Our feature groups derived from the survey location data
 let oncampus = L.featureGroup();
 let offcampus = L.featureGroup();
 let offcampusgrad = L.featureGroup();
@@ -10,6 +25,7 @@ let commuter = L.featureGroup();
 let unhoused = L.featureGroup();
 let other = L.featureGroup();
 
+// Labeling our Layers
 let layers = {
     "On Campus Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='red' /></svg>": oncampus,
     "Off Campus Student (Living in Westwood) <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='blue' /></svg>": offcampus,
@@ -18,6 +34,10 @@ let layers = {
     "Homeless/Unhoused Student <svg height='10' width='10'><circle cx='5' cy='5' r='4' stroke='black' stroke-width='1' fill='purple' /></svg>": unhoused,
 }
 
+L.control.layers(null,layers, {collapsed:false}).addTo(map)
+
+
+// Circle Options
 let circleOptions = {
     radius: 6,
     fillColor: "#ff7800",
@@ -27,21 +47,7 @@ let circleOptions = {
     fillOpacity: 0.8
 }
 
-
-// define the leaflet map
-const map = L.map('the_map').setView(mapOptions.center, mapOptions.zoom);
-
-// add layer control box
-L.control.layers(null,layers, {collapsed:false}).addTo(map)
-
-let Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-    maxZoom: 16
-});
-
-Esri_WorldGrayCanvas.addTo(map);
-
-
+// Add Marker Function that 1) Adds Markers 2) Allows User to Hover Over Markers and 3) Adds Information About the Markers to Summary Divs
 function addMarker(data){
   function mouseoverHandler(event) {
     const markerDataPanel = document.getElementById('survdata');
@@ -94,7 +100,7 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
           .on('mouseover', mouseoverHandler)
           .on('mouseout', mouseoutHandler)
   );
-  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampus, 'divOffCampusHousingStudents');
+  createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampus, 'divOffCampusHousingStudents');
 }
     else if(surveydataproperties.location == "Off-Campus Graduate Housing (Living in Westwood/Palms)"){
         circleOptions.fillColor = "yellow"
@@ -103,7 +109,7 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         .on('mouseover', mouseoverHandler)
         .on('mouseout', mouseoutHandler)
   );
-  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], offcampusgrad, 'divOffCampusGraduateHousingStudents');
+  createButtons(data.lat, data.lng, surveydataproperties.experiences, offcampusgrad, 'divOffCampusGraduateHousingStudents');
 }
     else if(surveydataproperties.location == "Off-Campus Commuter (Living outside Westwood)"){
         circleOptions.fillColor = "green"
@@ -112,7 +118,7 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         .on('mouseover', mouseoverHandler)
         .on('mouseout', mouseoutHandler)
   );
-  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], commuter, 'divCommuterStudents');
+  createButtons(data.lat, data.lng, surveydataproperties.experiences, commuter, 'divCommuterStudents');
 }
     else if(surveydataproperties.location == "Currently Unhoused/Homeless"){
         circleOptions.fillColor = "purple"
@@ -121,7 +127,7 @@ if (surveydataproperties.location === "On-Campus Housing (Dorms)") {
         .on('mouseover', mouseoverHandler)
         .on('mouseout', mouseoutHandler)
   );
-  createButtons(data.lat, data.lng, data['What are your experiences with housing insecurity and affordability at UCLA?'], unhoused, 'divUnhousedStudents');
+  createButtons(data.lat, data.lng, surveydataproperties.experiences, unhoused, 'divUnhousedStudents');
 }
 else {
   circleOptions.fillColor = "black"
@@ -195,10 +201,6 @@ function createButtons(lat, lng, title, group, dividee) {
   ForButtons.appendChild(newButton2);
 }
 
-
-
-// Add buttons for other feature groups as needed  
-
 function loadData(url){
     Papa.parse(url, {
         header: true,
@@ -210,7 +212,6 @@ function loadData(url){
 function processData(results) {
   console.log(results);
   var filteredData = results.data.filter(data => data['Have you ever experienced housing insecurity and/or unaffordability as a UCLA student?'] !== 'No');
-  console.log(filteredData)
   var barData = filteredData.map(data => data['Where do you currently live?']);
   var counts = {};
   barData.forEach(response => {
@@ -225,13 +226,27 @@ function processData(results) {
       value: counts[key]
   }));
   console.log(data3);
+  const customSortOrder = ['On-Campus Housing (Dorms)', 'Off-Campus Housing (Living in Westwood)', 'Off-Campus Graduate Housing (Living in Westwood/Palms)', 'Off-Campus Commuter (Living outside Westwood)', 'Currently Unhoused/Homeless'];
+
+  data3.sort((a, b) => {
+  const indexA = customSortOrder.indexOf(a.key);
+  const indexB = customSortOrder.indexOf(b.key);
+
+  if (indexA < indexB) {
+    return -1; // a should be sorted before b
+  } else if (indexA > indexB) {
+    return 1; // a should be sorted after b
+  }
+
+  return 0; // a and b have the same sort order
+});
 
   filteredData.forEach(data => {
       console.log(data);
       addMarker(data);
   });
 
-  barplot(data3)
+    barplot(data3) // creates the bar chart of our data
     oncampus.addTo(map) // add our layers after markers have been made
     offcampus.addTo(map) // add our layers after markers have been made  
     offcampusgrad.addTo(map) // add our layers after markers have been made
