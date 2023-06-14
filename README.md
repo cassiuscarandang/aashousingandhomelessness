@@ -24,7 +24,7 @@ Through gaining knowledge about the extent of accessibility and affrodability of
 
 ## Technologies Used
 
-For this project, we utilized Leaflet JS, Google Sheets, Google Forms, and a number of programming languages, including HTML, CSS, and Javascript. Surveys were distributed using Google Form, and responses were recorded in Google Sheets. We then used PapaParse to bring in our survey data, and map the data through Leaflet JS. Mapplication was built out and designed using HTML, CSS, and Javascript
+For this project, we utilized Leaflet JS, D3.js, Google Sheets, Google Forms, and a number of programming languages, including HTML, CSS, and Javascript. Surveys were distributed using Google Form, and responses were recorded in Google Sheets. We then used PapaParse to bring in our survey data, map the data through Leaflet JS, and create data visualizations through D3.js. The application was built out and designed using HTML, CSS, and Javascript.
 
 ## Features
 
